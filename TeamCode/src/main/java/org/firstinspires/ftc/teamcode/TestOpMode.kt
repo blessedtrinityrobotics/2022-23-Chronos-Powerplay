@@ -4,14 +4,24 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp
 import com.qualcomm.robotcore.hardware.DcMotor
 import com.qualcomm.robotcore.hardware.DcMotorSimple
+import com.qualcomm.robotcore.hardware.Servo
 
-@TeleOp(name="Test TeleOp")
+/*
+* Use adb connect 192.168.43.1:5555
+*
+*/
+
+
+@TeleOp(name="TestTeleOp")
 class TestOpMode : OpMode() {
     lateinit var frontLeftMotor: DcMotor
     lateinit var backLeftMotor: DcMotor
     lateinit var frontRightMotor: DcMotor
     lateinit var backRightMotor: DcMotor
     lateinit var liftMotor: DcMotor
+    lateinit var leftClaw: Servo
+    lateinit var rightClaw: Servo
+    var isGrabbing = false
 
 
     override fun init() {
@@ -21,7 +31,11 @@ class TestOpMode : OpMode() {
         backRightMotor = hardwareMap.dcMotor.get("back_right")
         frontRightMotor.direction = DcMotorSimple.Direction.REVERSE
         backRightMotor.direction = DcMotorSimple.Direction.REVERSE
+
         liftMotor = hardwareMap.dcMotor.get("lift")
+
+        leftClaw = hardwareMap.servo.get("left_claw")
+        rightClaw = hardwareMap.servo.get("right_claw")
     }
 
     override fun loop() {
@@ -35,6 +49,14 @@ class TestOpMode : OpMode() {
         backRightMotor.power = rightPower.toDouble()
 
         liftMotor.power = if (gamepad1.dpad_up) 0.25 else if (gamepad1.dpad_down) -0.25 else 0.0
+
+        if (gamepad1.a) {
+            isGrabbing = !isGrabbing
+            leftClaw.position = if (isGrabbing) 90.0 else 0.0
+            rightClaw.position = if (isGrabbing) 90.0 else 0.0
+        }
+        telemetry.addData("Is grabbing?", isGrabbing)
+        telemetry.update()
     }
 
 }
