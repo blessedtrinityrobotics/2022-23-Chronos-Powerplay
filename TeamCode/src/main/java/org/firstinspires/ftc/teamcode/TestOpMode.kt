@@ -5,6 +5,9 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp
 import com.qualcomm.robotcore.hardware.DcMotor
 import com.qualcomm.robotcore.hardware.DcMotorSimple
 import com.qualcomm.robotcore.hardware.Servo
+import com.qualcomm.robotcore.util.ElapsedTime
+import kotlin.math.pow
+import kotlin.math.sign
 
 /*
 * Use adb connect 192.168.43.1:5555
@@ -21,7 +24,12 @@ class TestOpMode : OpMode() {
     lateinit var liftMotor: DcMotor
     lateinit var leftClaw: Servo
     lateinit var rightClaw: Servo
+    var elapsedtime = ElapsedTime()
     var isGrabbing = false
+    var grabDebounce = false
+
+    val BOTTOM_LIFT_POS = -20
+    val TOP_LIFT_POS = -4200
 
 
     override fun init() {
@@ -33,30 +41,51 @@ class TestOpMode : OpMode() {
         backRightMotor.direction = DcMotorSimple.Direction.REVERSE
 
         liftMotor = hardwareMap.dcMotor.get("lift")
+        liftMotor.zeroPowerBehavior = DcMotor.ZeroPowerBehavior.BRAKE
+        liftMotor.mode = DcMotor.RunMode.RUN_USING_ENCODER
+
 
         leftClaw = hardwareMap.servo.get("left_claw")
+        leftClaw.direction = Servo.Direction.REVERSE
         rightClaw = hardwareMap.servo.get("right_claw")
+
+        elapsedtime.reset()
     }
 
     override fun loop() {
-        var leftPower = gamepad1.left_stick_y
-        var rightPower = gamepad1.right_stick_y
+        var leftPower = gamepad1.left_stick_y.toDouble().pow(2.0)
+        var rightPower = gamepad1.right_stick_y.toDouble().pow(2.0)
 
-        frontLeftMotor.power = leftPower.toDouble()
-        backLeftMotor.power = leftPower.toDouble()
+        frontLeftMotor.power = leftPower
+        backLeftMotor.power = leftPower
 
         frontRightMotor.power = rightPower.toDouble()
         backRightMotor.power = rightPower.toDouble()
 
-        liftMotor.power = if (gamepad1.dpad_up) 0.25 else if (gamepad1.dpad_down) -0.25 else 0.0
-
-        if (gamepad1.a) {
-            isGrabbing = !isGrabbing
-            leftClaw.position = if (isGrabbing) 90.0 else 0.0
-            rightClaw.position = if (isGrabbing) 90.0 else 0.0
-        }
+        lift(gamepad2.right_stick_y.toDouble())
         telemetry.addData("Is grabbing?", isGrabbing)
+        telemetry.addData("Lift Position", liftMotor.currentPosition)
         telemetry.update()
+
+        if (gamepad1.a && !grabDebounce) {
+            grabDebounce = true
+            isGrabbing = !isGrabbing
+            leftClaw.position = if (isGrabbing) 0.25 else 0.0
+            rightClaw.position = if (isGrabbing) 0.25 else 0.0
+            Thread.sleep(1000)
+            grabDebounce = false
+        }
+
+    }
+
+    private fun lift(power: Double) {
+        // TODO: Make the directions not cursed
+        if ((sign(power) != 1.0 || liftMotor.currentPosition < BOTTOM_LIFT_POS)
+            && (sign(power) != -1.0 || liftMotor.currentPosition > TOP_LIFT_POS)) {
+            liftMotor.power = power
+        } else {
+            liftMotor.power = 0.0
+        }
     }
 
 }
