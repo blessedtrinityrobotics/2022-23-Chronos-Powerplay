@@ -3,9 +3,6 @@ package org.firstinspires.ftc.teamcode
 import com.qualcomm.robotcore.eventloop.opmode.OpMode
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp
 import com.qualcomm.robotcore.hardware.DcMotor
-import com.qualcomm.robotcore.hardware.DcMotorSimple
-import com.qualcomm.robotcore.hardware.Servo
-import com.qualcomm.robotcore.util.ElapsedTime
 import kotlin.math.pow
 import kotlin.math.sign
 
@@ -17,65 +14,41 @@ import kotlin.math.sign
 
 @TeleOp(name="TestTeleOp")
 class TestOpMode : OpMode() {
-    lateinit var frontLeftMotor: DcMotor
-    lateinit var backLeftMotor: DcMotor
-    lateinit var frontRightMotor: DcMotor
-    lateinit var backRightMotor: DcMotor
     lateinit var liftMotor: DcMotor
-    lateinit var leftClaw: Servo
-    lateinit var rightClaw: Servo
-    var elapsedtime = ElapsedTime()
-    var isGrabbing = false
-    var grabDebounce = false
+
+    lateinit var drivetrain: Drivetrain
+    lateinit var claw: Claw
 
     val BOTTOM_LIFT_POS = -20
     val TOP_LIFT_POS = -4200
 
 
     override fun init() {
-        frontLeftMotor = hardwareMap.dcMotor.get("front_left")
-        backLeftMotor = hardwareMap.dcMotor.get("back_left")
-        frontRightMotor = hardwareMap.dcMotor.get("front_right")
-        backRightMotor = hardwareMap.dcMotor.get("back_right")
-        frontRightMotor.direction = DcMotorSimple.Direction.REVERSE
-        backRightMotor.direction = DcMotorSimple.Direction.REVERSE
+        drivetrain = Drivetrain(hardwareMap)
+        claw = Claw(hardwareMap)
 
         liftMotor = hardwareMap.dcMotor.get("lift")
         liftMotor.zeroPowerBehavior = DcMotor.ZeroPowerBehavior.BRAKE
         liftMotor.mode = DcMotor.RunMode.RUN_USING_ENCODER
-
-
-        leftClaw = hardwareMap.servo.get("left_claw")
-        leftClaw.direction = Servo.Direction.REVERSE
-        rightClaw = hardwareMap.servo.get("right_claw")
-
-        elapsedtime.reset()
     }
 
     override fun loop() {
-        var leftPower = gamepad1.left_stick_y.toDouble().pow(2.0)
-        var rightPower = gamepad1.right_stick_y.toDouble().pow(2.0)
+        var leftPower = gamepad1.left_stick_y.toDouble()
+        var rightPower = gamepad1.left_stick_x.toDouble()
 
-        frontLeftMotor.power = leftPower
-        backLeftMotor.power = leftPower
-
-        frontRightMotor.power = rightPower.toDouble()
-        backRightMotor.power = rightPower.toDouble()
+        drivetrain.arcadeDrive(leftPower.pow(2.0) * sign(leftPower), rightPower.pow(2.0) * sign(rightPower))
 
         lift(gamepad2.right_stick_y.toDouble())
-        telemetry.addData("Is grabbing?", isGrabbing)
         telemetry.addData("Lift Position", liftMotor.currentPosition)
-        telemetry.update()
 
-        if (gamepad1.a && !grabDebounce) {
-            grabDebounce = true
-            isGrabbing = !isGrabbing
-            leftClaw.position = if (isGrabbing) 0.25 else 0.0
-            rightClaw.position = if (isGrabbing) 0.25 else 0.0
-            Thread.sleep(1000)
-            grabDebounce = false
+        if (gamepad2.a && claw.canGrab) {
+            claw.toggleGrab()
         }
 
+        telemetry.addData("Is grabbing?", claw.isGrabbing)
+        telemetry.addData("Left Power", drivetrain.leftPower)
+        telemetry.addData("Right Power", drivetrain.rightPower)
+        telemetry.update()
     }
 
     private fun lift(power: Double) {
