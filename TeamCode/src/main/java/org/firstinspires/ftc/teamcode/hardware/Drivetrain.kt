@@ -1,9 +1,13 @@
-package org.firstinspires.ftc.teamcode
+package org.firstinspires.ftc.teamcode.hardware
 
 import com.qualcomm.robotcore.hardware.DcMotor
 import com.qualcomm.robotcore.hardware.DcMotorSimple
 import com.qualcomm.robotcore.hardware.HardwareMap
 import com.qualcomm.robotcore.util.Range
+import org.firstinspires.ftc.teamcode.BACK_LEFT_MOTOR
+import org.firstinspires.ftc.teamcode.BACK_RIGHT_MOTOR
+import org.firstinspires.ftc.teamcode.FRONT_LEFT_MOTOR
+import org.firstinspires.ftc.teamcode.FRONT_RIGHT_MOTOR
 
 class Drivetrain(val hardwareMap: HardwareMap) {
     var leftPower = 0.0
@@ -29,8 +33,8 @@ class Drivetrain(val hardwareMap: HardwareMap) {
     }
 
     fun arcadeDrive(throttle: Double, steer: Double) {
-        leftPower = Range.clip(throttle + steer, -1.0, 1.0)
-        rightPower = Range.clip(throttle - steer, -1.0, 1.0)
+        leftPower = Range.clip(throttle - steer, -1.0, 1.0)
+        rightPower = Range.clip(throttle + steer, -1.0, 1.0)
         applyPower()
     }
 

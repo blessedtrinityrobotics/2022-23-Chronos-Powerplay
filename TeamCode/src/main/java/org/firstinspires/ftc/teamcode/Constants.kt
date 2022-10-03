@@ -8,4 +8,5 @@ const val BACK_RIGHT_MOTOR = "back_right"
 const val LEFT_CLAW_SERVO = "left_claw"
 const val RIGHT_CLAW_SERVO = "right_claw"
 
-const val GRABBER_DEBOUNCE_TIME = 250 // millis
+const val LIFT_MOTOR = "lift"
+const val LIFT_TOUCH_SENSOR = "lift_touch"
