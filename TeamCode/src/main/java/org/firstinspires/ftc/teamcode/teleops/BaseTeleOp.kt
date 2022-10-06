@@ -43,8 +43,9 @@ abstract class BaseTeleOp : OpMode() {
         telemetry.addData("Lift Target", lift.target)
         telemetry.addData("Is Touched?", lift.isTouched)
         telemetry.addData("Is grabbing?", claw.isGrabbing)
-        telemetry.addData("Left Power", drivetrain.leftPower)
-        telemetry.addData("Right Power", drivetrain.rightPower)
+        telemetry.addData("Throttle %", drivetrain.driveVector.throttle)
+        telemetry.addData("Turn %", drivetrain.driveVector.turn)
+        telemetry.addData("Strafe %", drivetrain.driveVector.strafe)
         telemetry.update()
     }
 }

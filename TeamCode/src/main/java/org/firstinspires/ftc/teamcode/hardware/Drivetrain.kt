@@ -8,12 +8,13 @@ import org.firstinspires.ftc.teamcode.BACK_LEFT_MOTOR
 import org.firstinspires.ftc.teamcode.BACK_RIGHT_MOTOR
 import org.firstinspires.ftc.teamcode.FRONT_LEFT_MOTOR
 import org.firstinspires.ftc.teamcode.FRONT_RIGHT_MOTOR
+import kotlin.math.abs
+import kotlin.math.max
+
+data class DriveInfo(var throttle: Double, var strafe: Double, var turn: Double)
 
 class Drivetrain(val hardwareMap: HardwareMap) {
-    var leftPower = 0.0
-        private set
-    var rightPower = 0.0
-        private set
+    var driveVector = DriveInfo(0.0, 0.0, 0.0);
 
     var frontLeft: DcMotor = hardwareMap.dcMotor.get(FRONT_LEFT_MOTOR)
     var backLeft: DcMotor = hardwareMap.dcMotor.get(BACK_LEFT_MOTOR)
@@ -26,23 +27,36 @@ class Drivetrain(val hardwareMap: HardwareMap) {
     }
 
     fun tankDrive(left: Double, right: Double) {
-        // in case we use this value seperately, like for telemetry, we need to expose it
-        leftPower = left
-        rightPower = right
-        applyPower()
+        applyPower(left, right)
     }
 
     fun arcadeDrive(throttle: Double, steer: Double) {
-        leftPower = Range.clip(throttle - steer, -1.0, 1.0)
-        rightPower = Range.clip(throttle + steer, -1.0, 1.0)
-        applyPower()
+        applyPower(
+        Range.clip(throttle - steer, -1.0, 1.0),
+        Range.clip(throttle + steer, -1.0, 1.0))
     }
 
-    private fun applyPower() {
+    fun holonomicDrive(throttle: Double, strafe: Double, steer: Double) {
+        val total = abs(throttle) + abs(strafe) + abs(steer)
+        val scale = max(total, 1.0)
+        frontLeft.power = (throttle + strafe + steer) / scale
+        backLeft.power = (throttle - strafe + steer) / scale
+        frontRight.power = (throttle - strafe - steer) / scale
+        backRight.power = (throttle + strafe - steer) / scale
+
+        driveVector.throttle = throttle/total
+        driveVector.turn = steer/total
+        driveVector.strafe = strafe/total
+    }
+
+    private fun applyPower(leftPower: Double, rightPower:Double) {
         frontLeft.power = leftPower
         backLeft.power = leftPower
 
         frontRight.power = rightPower
         backRight.power = rightPower
+
+        driveVector.turn = abs(leftPower - rightPower)/2.0 // Percentage difference
+        driveVector.throttle = (leftPower + rightPower)/2.0 // Average
     }
 }
