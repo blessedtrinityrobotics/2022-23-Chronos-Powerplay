@@ -10,3 +10,5 @@ const val RIGHT_CLAW_SERVO = "right_claw"
 
 const val LIFT_MOTOR = "lift"
 const val LIFT_TOUCH_SENSOR = "lift_touch"
+
+const val CRAWL_SPEED = 0.1

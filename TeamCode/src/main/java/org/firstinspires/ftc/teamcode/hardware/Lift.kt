@@ -24,6 +24,8 @@ class Lift(private val hardwareMap: HardwareMap) {
     var isTouched = false
         private set
 
+    var encoderOffset = 0
+
     init {
         liftMotor.direction = DcMotorSimple.Direction.REVERSE
         liftMotor.zeroPowerBehavior = DcMotor.ZeroPowerBehavior.BRAKE
@@ -32,13 +34,14 @@ class Lift(private val hardwareMap: HardwareMap) {
 
     fun move(power: Double) {
         if (touchSensor.isPressed) {
+            encoderOffset = 0
             liftMotor.mode = DcMotor.RunMode.STOP_AND_RESET_ENCODER
         }
 
         isTouched = touchSensor.isPressed
 
         if (power != 0.0) {
-            liftMotor.targetPosition = Range.clip(liftMotor.currentPosition + (1000 * power).toInt(), 0, 4500)
+            liftMotor.targetPosition = Range.clip(liftMotor.currentPosition + (1000 * power).toInt(), 0 - encoderOffset, 4500)
             liftMotor.mode = DcMotor.RunMode.RUN_TO_POSITION
         }
 
@@ -47,5 +50,9 @@ class Lift(private val hardwareMap: HardwareMap) {
 
     fun reset() {
         liftMotor.targetPosition = 0
+    }
+
+    fun resetEncoder() {
+        encoderOffset = -1000
     }
 }
