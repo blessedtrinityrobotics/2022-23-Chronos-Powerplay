@@ -39,6 +39,9 @@ abstract class BaseTeleOp : OpMode() {
         if (gamepad2.y)
             lift.reset()
 
+        if (gamepad2.x)
+            lift.resetEncoder()
+
         telemetry.addData("Lift Position", lift.position)
         telemetry.addData("Lift Target", lift.target)
         telemetry.addData("Is Touched?", lift.isTouched)

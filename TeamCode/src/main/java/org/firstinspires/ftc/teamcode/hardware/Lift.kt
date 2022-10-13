@@ -33,19 +33,23 @@ class Lift(private val hardwareMap: HardwareMap) {
     }
 
     fun move(power: Double) {
-        if (touchSensor.isPressed) {
-            encoderOffset = 0
+        // Along with touch, we need to make sure the current pos is low, so accidental touches won't work
+        if (touchSensor.isPressed && liftMotor.currentPosition < 1000) {
+            encoderOffset = 0 // Since we are back to normal, we don't need the failsafe
             liftMotor.mode = DcMotor.RunMode.STOP_AND_RESET_ENCODER
         }
 
         isTouched = touchSensor.isPressed
 
+        // Only set target pos when joystick is out of neutral
         if (power != 0.0) {
-            liftMotor.targetPosition = Range.clip(liftMotor.currentPosition + (1000 * power).toInt(), 0 - encoderOffset, 4500)
+            liftMotor.targetPosition = Range.clip(
+                liftMotor.currentPosition + (1000 * power).toInt(), // Edit the target relative to the currentPosition for use with joysticks
+                0 - encoderOffset, 4500) // Subtract the encoder offset so you can go down in a pinch
             liftMotor.mode = DcMotor.RunMode.RUN_TO_POSITION
         }
 
-        liftMotor.power = 1.0
+        liftMotor.power = 1.0 // Continually set this because we need power to reach target pos
     }
 
     fun reset() {
@@ -53,6 +57,7 @@ class Lift(private val hardwareMap: HardwareMap) {
     }
 
     fun resetEncoder() {
-        encoderOffset = -1000
+        // Set it to a really high value so it can go down safely
+        encoderOffset = 100000
     }
 }
