@@ -11,8 +11,8 @@ class MechanumTeleOp : BaseTeleOp() {
         val boost = gamepad1.right_trigger.toDouble()
         val multiplier = 1.0 - Range.scale(boost, 0.0, 1.0, 0.0, 1.0 - CRAWL_SPEED)
         val throttle = smoothInput(gamepad1.left_stick_y.toDouble()) * multiplier
-        val strafe = smoothInput(gamepad1.right_stick_x.toDouble()) * multiplier * 1.1
-        val turn = smoothInput(gamepad1.left_stick_x.toDouble()) * multiplier
+        val strafe = smoothInput(gamepad1.left_stick_x.toDouble()) * multiplier * 1.1
+        val turn = smoothInput(gamepad1.right_stick_x.toDouble()) * multiplier
 
         telemetry.addData("Boost", multiplier)
 

@@ -42,6 +42,10 @@ abstract class BaseTeleOp : OpMode() {
         if (gamepad2.x)
             lift.resetEncoder()
 
+        telemetry.addData("Angle 1", drivetrain.imu.angle.firstAngle)
+        telemetry.addData("Angle 2", drivetrain.imu.angle.secondAngle)
+        telemetry.addData("Angle 3", drivetrain.imu.angle.thirdAngle)
+
         telemetry.addData("Lift Position", lift.position)
         telemetry.addData("Lift Target", lift.target)
         telemetry.addData("Is Touched?", lift.isTouched)
