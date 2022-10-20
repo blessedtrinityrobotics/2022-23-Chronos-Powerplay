@@ -14,10 +14,6 @@ public class SignalSleevePipeline extends OpenCvPipeline {
 
     private int zone = 0;
 
-    static {
-        System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
-    }
-
     /**
      * This is the primary method that runs the entire pipeline and updates the outputs.
      */
@@ -44,15 +40,15 @@ public class SignalSleevePipeline extends OpenCvPipeline {
         // Step HSV_Threshold2:
         Mat zone1Input = blurOutput;
         double[] zone1Hue = {142, 172};
-        double[] zone1Saturation = {103, 255};
-        double[] zone1Value = {116, 255};
+        double[] zone1Saturation = {0, 255};
+        double[] zone1Value = {0, 255};
         hsvThreshold(zone1Input, zone1Hue, zone1Saturation, zone1Value, zone1Output);
 
         int zone1Count = Core.countNonZero(zone1Output);
         int zone2Count = Core.countNonZero(zone2Output);
         int zone3Count = Core.countNonZero(zone3Output);
 
-        if (zone1Count > Math.max(zone2Count, zone1Count)) {
+        if (zone1Count > Math.max(zone2Count, zone3Count)) {
             zone = 1;
         } else if (zone2Count > Math.max(zone1Count, zone3Count)) {
             zone = 2;
@@ -60,9 +56,13 @@ public class SignalSleevePipeline extends OpenCvPipeline {
             zone = 3;
         }
 
-        return source0;
+        return zone2Output;
     }
 
+    /**
+     * Use this to determine where to park the robot
+     *
+     */
     public int getZone() {
         return zone;
     }
