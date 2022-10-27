@@ -12,3 +12,10 @@ const val LIFT_MOTOR = "lift"
 const val LIFT_TOUCH_SENSOR = "lift_touch"
 
 const val CRAWL_SPEED = 0.1
+
+const val AUTO_CONE_DISTANCE = -900
+const val AUTO_SET_DISTANCE = -1200
+const val AUTO_PARK_DISTANCE = -1000
+
+const val LEFT_TURN = 1.5
+const val RIGHT_TURN = -1.5

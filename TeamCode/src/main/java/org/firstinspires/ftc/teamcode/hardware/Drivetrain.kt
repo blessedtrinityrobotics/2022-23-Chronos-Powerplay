@@ -60,4 +60,15 @@ class Drivetrain(val hardwareMap: HardwareMap) {
         driveVector.turn = abs(leftPower - rightPower)/2.0 // Percentage difference
         driveVector.throttle = (leftPower + rightPower)/2.0 // Average
     }
+
+    fun encoderReset(){
+        frontLeft.mode = DcMotor.RunMode.STOP_AND_RESET_ENCODER
+        frontRight.mode = DcMotor.RunMode.STOP_AND_RESET_ENCODER
+        backLeft.mode = DcMotor.RunMode.STOP_AND_RESET_ENCODER
+        backRight.mode = DcMotor.RunMode.STOP_AND_RESET_ENCODER
+        frontLeft.mode = DcMotor.RunMode.RUN_WITHOUT_ENCODER
+        frontRight.mode = DcMotor.RunMode.RUN_WITHOUT_ENCODER
+        backLeft.mode = DcMotor.RunMode.RUN_WITHOUT_ENCODER
+        backRight.mode = DcMotor.RunMode.RUN_WITHOUT_ENCODER
+    }
 }

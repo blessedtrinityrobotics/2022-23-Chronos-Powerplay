@@ -27,7 +27,7 @@ abstract class BaseTeleOp : OpMode() {
     override fun loop() {
         drive()
 
-        lift.move(smoothInput(-gamepad2.right_stick_y.toDouble()))
+        lift.move(smoothInput(-gamepad2.left_stick_y.toDouble()))
 
         if (gamepad2.a && !isClawButtonPressed) {
             isClawButtonPressed = true
@@ -53,6 +53,8 @@ abstract class BaseTeleOp : OpMode() {
         telemetry.addData("Throttle %", drivetrain.driveVector.throttle)
         telemetry.addData("Turn %", drivetrain.driveVector.turn)
         telemetry.addData("Strafe %", drivetrain.driveVector.strafe)
+
+        telemetry.addData("rightPos", drivetrain.frontRight.currentPosition)
         telemetry.update()
     }
 }

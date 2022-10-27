@@ -4,7 +4,8 @@ import com.acmerobotics.dashboard.FtcDashboard
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName
-import org.firstinspires.ftc.teamcode.SignalSleevePipeline
+import org.firstinspires.ftc.teamcode.*
+import org.firstinspires.ftc.teamcode.hardware.Drivetrain
 import org.openftc.easyopencv.OpenCvCamera
 
 import org.openftc.easyopencv.OpenCvCameraFactory
@@ -19,8 +20,11 @@ FTC Dashboard: http://192.168.43.1:8080/dash
 class BaseAuto : LinearOpMode() {
     lateinit var webcam : OpenCvWebcam
     lateinit var pipeline : SignalSleevePipeline
+    lateinit var drivetrain: Drivetrain
 
     override fun runOpMode() {
+        drivetrain = Drivetrain(hardwareMap)
+
         pipeline = SignalSleevePipeline()
 
         val cameraMonitorViewId = hardwareMap.appContext.resources.getIdentifier(
@@ -47,10 +51,57 @@ class BaseAuto : LinearOpMode() {
         waitForStart()
 
         while (opModeIsActive()) {
-            telemetry.addData("Zone", pipeline.zone)
-            telemetry.update()
 
-            sleep(100)
+            while ( drivetrain.frontRight.currentPosition > AUTO_CONE_DISTANCE && opModeIsActive()){
+              drivetrain.tankDrive(-0.3,-0.3)
+            }
+            drivetrain.tankDrive(0.0,0.0)
+
+            sleep(1000)
+            val zone = pipeline.zone
+
+//            while(opModeIsActive()){
+//                telemetry.addData("pipeZONE", pipeline.zone)
+//                telemetry.addData("Zone", zone)
+//                telemetry.update()
+//            }
+
+
+            while ( drivetrain.frontRight.currentPosition > AUTO_SET_DISTANCE && opModeIsActive()){
+                drivetrain.tankDrive(-0.3,-0.3)
+            }
+            drivetrain.tankDrive(0.0,0.0)
+
+            sleep(1000)
+
+            if(zone == 1){
+                while(drivetrain.imu.angle.firstAngle < LEFT_TURN  && opModeIsActive()) {
+                    drivetrain.tankDrive(0.3,-0.3)
+                }
+                drivetrain.tankDrive(0.0,0.0)
+                sleep(1000)
+                drivetrain.encoderReset()
+                while (drivetrain.frontRight.currentPosition > AUTO_PARK_DISTANCE && opModeIsActive()){
+                    drivetrain.tankDrive(-0.3, -0.3)
+                }
+                drivetrain.tankDrive(0.0,0.0)
+
+            } else if(zone == 3){
+                while (drivetrain.imu.angle.firstAngle > RIGHT_TURN && opModeIsActive()){
+                    drivetrain.tankDrive(-0.3,0.3)
+                }
+                drivetrain.tankDrive(0.0,0.0)
+                drivetrain.encoderReset()
+                while (drivetrain.frontRight.currentPosition > AUTO_PARK_DISTANCE && opModeIsActive()){
+                    drivetrain.tankDrive(-0.3, -0.3)
+                }
+                drivetrain.tankDrive(0.0,0.0)
+
+            } else { // when Zone is two and it should do nothing
+
+
+            }
+            stop()
         }
 
     }
