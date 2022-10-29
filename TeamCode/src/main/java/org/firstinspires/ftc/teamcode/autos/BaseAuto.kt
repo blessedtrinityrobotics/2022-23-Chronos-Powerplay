@@ -16,7 +16,7 @@ import org.openftc.easyopencv.OpenCvWebcam
 FTC Dashboard: http://192.168.43.1:8080/dash
  */
 
-@Autonomous(name="Test Auto")
+@Autonomous(name="Base Auto")
 class BaseAuto : LinearOpMode() {
     lateinit var webcam : OpenCvWebcam
     lateinit var pipeline : SignalSleevePipeline

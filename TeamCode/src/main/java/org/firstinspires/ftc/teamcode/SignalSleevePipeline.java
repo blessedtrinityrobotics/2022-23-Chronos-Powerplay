@@ -7,10 +7,10 @@ import org.openftc.easyopencv.OpenCvPipeline;
 public class SignalSleevePipeline extends OpenCvPipeline {
 
     //Outputs
-    private Mat blurOutput = new Mat();
-    private Mat zone3Output = new Mat(); // Blue
-    private Mat zone2Output = new Mat(); // Green
-    private Mat zone1Output = new Mat(); // Pink
+    private final Mat blurOutput = new Mat();
+    private final Mat zone3Output = new Mat(); // Blue
+    private final Mat zone2Output = new Mat(); // Green
+    private final Mat zone1Output = new Mat(); // Pink
 
     private int zone = 0;
 
@@ -56,12 +56,17 @@ public class SignalSleevePipeline extends OpenCvPipeline {
             zone = 3;
         }
 
-        return zone2Output;
+        Imgproc.putText(
+                source0,
+                "Zone: " + zone,
+                new Point(10, 20),
+                Imgproc.FONT_HERSHEY_PLAIN, 1,
+                new Scalar(255, 255, 255), 3);
+        return source0;
     }
 
     /**
      * Use this to determine where to park the robot
-     *
      */
     public int getZone() {
         return zone;
@@ -73,13 +78,13 @@ public class SignalSleevePipeline extends OpenCvPipeline {
 
     /**
      * Softens an image using one of several filters.
-     * @param input The image on which to perform the blur.
+     *
+     * @param input        The image on which to perform the blur.
      * @param doubleRadius The radius for the blur.
-     * @param output The image in which to store the output.
+     * @param output       The image in which to store the output.
      */
-    private void blur(Mat input, double doubleRadius,
-                      Mat output) {
-        int radius = (int)(doubleRadius + 0.5);
+    private void blur(Mat input, double doubleRadius, Mat output) {
+        int radius = (int) (doubleRadius + 0.5);
         int kernelSize = 6 * radius + 1;
         Imgproc.GaussianBlur(input, output, new Size(kernelSize, kernelSize), radius);
     }
@@ -88,15 +93,13 @@ public class SignalSleevePipeline extends OpenCvPipeline {
      * Segment an image based on hue, saturation, and value ranges.
      *
      * @param input The image on which to perform the HSL threshold.
-     * @param hue The min and max hue
-     * @param sat The min and max saturation
-     * @param val The min and max value
+     * @param hue   The min and max hue
+     * @param sat   The min and max saturation
+     * @param val   The min and max value
      */
-    private void hsvThreshold(Mat input, double[] hue, double[] sat, double[] val,
-                              Mat out) {
+    private void hsvThreshold(Mat input, double[] hue, double[] sat, double[] val, Mat out) {
         Imgproc.cvtColor(input, out, Imgproc.COLOR_RGB2HSV); // EasyOpenCV uses RGB instead of BGR
-        Core.inRange(out, new Scalar(hue[0], sat[0], val[0]),
-                new Scalar(hue[1], sat[1], val[1]), out);
+        Core.inRange(out, new Scalar(hue[0], sat[0], val[0]), new Scalar(hue[1], sat[1], val[1]), out);
     }
 
 }
