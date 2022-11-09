@@ -19,7 +19,7 @@ class Claw(val hardwareMap: HardwareMap) {
 
     fun toggleGrab() {
         isGrabbing = !isGrabbing
-        leftClaw.position = if (isGrabbing) 0.3 else 0.0
-        rightClaw.position = if (isGrabbing) 0.3 else 0.0
+        leftClaw.position = if (isGrabbing) 0.275 else 0.075
+        rightClaw.position = if (isGrabbing) 0.275 else 0.075
     }
 }

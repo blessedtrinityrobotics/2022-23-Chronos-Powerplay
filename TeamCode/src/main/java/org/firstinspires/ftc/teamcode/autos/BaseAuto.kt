@@ -52,56 +52,56 @@ class BaseAuto : LinearOpMode() {
 
         while (opModeIsActive()) {
 
-            while ( drivetrain.frontRight.currentPosition > AUTO_CONE_DISTANCE && opModeIsActive()){
-              drivetrain.tankDrive(-0.3,-0.3)
-            }
-            drivetrain.tankDrive(0.0,0.0)
-
+            getToCone()
             sleep(1000)
             val zone = pipeline.zone
+            park(zone)
 
-//            while(opModeIsActive()){
-//                telemetry.addData("pipeZONE", pipeline.zone)
-//                telemetry.addData("Zone", zone)
-//                telemetry.update()
-//            }
+            stop()
+        }
 
+    }
 
-            while ( drivetrain.frontRight.currentPosition > AUTO_SET_DISTANCE && opModeIsActive()){
-                drivetrain.tankDrive(-0.3,-0.3)
+    private fun getToCone(){
+        while ( drivetrain.frontRight.currentPosition > AUTO_CONE_DISTANCE && opModeIsActive()){
+            drivetrain.tankDrive(-0.3,-0.3)
+        }
+        drivetrain.tankDrive(0.0,0.0)
+    }
+
+    private fun park(zone :Int){
+        while ( drivetrain.frontRight.currentPosition > AUTO_SET_DISTANCE && opModeIsActive()){
+            drivetrain.tankDrive(-0.3,-0.3)
+        }
+        drivetrain.tankDrive(0.0,0.0)
+
+        sleep(1000)
+
+        if(zone == 1){
+            while(drivetrain.imu.angle.firstAngle < LEFT_TURN  && opModeIsActive()) {
+                drivetrain.tankDrive(0.3,-0.3)
+            }
+            drivetrain.tankDrive(0.0,0.0)
+            sleep(1000)
+            drivetrain.encoderReset()
+            while (drivetrain.frontRight.currentPosition > AUTO_PARK_DISTANCE && opModeIsActive()){
+                drivetrain.tankDrive(-0.3, -0.3)
             }
             drivetrain.tankDrive(0.0,0.0)
 
-            sleep(1000)
-
-            if(zone == 1){
-                while(drivetrain.imu.angle.firstAngle < LEFT_TURN  && opModeIsActive()) {
-                    drivetrain.tankDrive(0.3,-0.3)
-                }
-                drivetrain.tankDrive(0.0,0.0)
-                sleep(1000)
-                drivetrain.encoderReset()
-                while (drivetrain.frontRight.currentPosition > AUTO_PARK_DISTANCE && opModeIsActive()){
-                    drivetrain.tankDrive(-0.3, -0.3)
-                }
-                drivetrain.tankDrive(0.0,0.0)
-
-            } else if(zone == 3){
-                while (drivetrain.imu.angle.firstAngle > RIGHT_TURN && opModeIsActive()){
-                    drivetrain.tankDrive(-0.3,0.3)
-                }
-                drivetrain.tankDrive(0.0,0.0)
-                drivetrain.encoderReset()
-                while (drivetrain.frontRight.currentPosition > AUTO_PARK_DISTANCE && opModeIsActive()){
-                    drivetrain.tankDrive(-0.3, -0.3)
-                }
-                drivetrain.tankDrive(0.0,0.0)
-
-            } else { // when Zone is two and it should do nothing
-
-
+        } else if(zone == 3){
+            while (drivetrain.imu.angle.firstAngle > RIGHT_TURN && opModeIsActive()){
+                drivetrain.tankDrive(-0.3,0.3)
             }
-            stop()
+            drivetrain.tankDrive(0.0,0.0)
+            drivetrain.encoderReset()
+            while (drivetrain.frontRight.currentPosition > AUTO_PARK_DISTANCE && opModeIsActive()){
+                drivetrain.tankDrive(-0.3, -0.3)
+            }
+            drivetrain.tankDrive(0.0,0.0)
+
+        } else { // when Zone is two and it should do nothing
+
         }
 
     }

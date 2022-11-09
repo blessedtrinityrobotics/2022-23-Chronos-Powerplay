@@ -52,6 +52,12 @@ class Lift(private val hardwareMap: HardwareMap) {
         liftMotor.power = 1.0 // Continually set this because we need power to reach target pos
     }
 
+    fun positionSetter(pos :Int){
+        liftMotor.mode = DcMotor.RunMode.RUN_TO_POSITION
+        liftMotor.targetPosition = pos
+        liftMotor.power = 1.0
+    }
+
     fun reset() {
         liftMotor.targetPosition = 0
     }

@@ -5,6 +5,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName
 import org.firstinspires.ftc.teamcode.*
+import org.firstinspires.ftc.teamcode.TunableConstants.LeftStrafeAuto
 import org.firstinspires.ftc.teamcode.hardware.Drivetrain
 import org.openftc.easyopencv.OpenCvCamera
 
@@ -49,6 +50,7 @@ class CamTestAuto : LinearOpMode() {
 
         while(opModeIsActive()) {
             telemetry.addData("Zone", pipeline.zone)
+            telemetry.addData("Test", LeftStrafeAuto)
             telemetry.update()
         }
 
