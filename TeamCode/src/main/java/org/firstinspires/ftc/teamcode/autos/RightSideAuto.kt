@@ -5,22 +5,16 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName
 import org.firstinspires.ftc.teamcode.*
-import org.firstinspires.ftc.teamcode.TunableConstants.LeftStrafeAuto
 import org.firstinspires.ftc.teamcode.hardware.Claw
 import org.firstinspires.ftc.teamcode.hardware.Drivetrain
 import org.firstinspires.ftc.teamcode.hardware.Lift
 import org.openftc.easyopencv.OpenCvCamera
-
 import org.openftc.easyopencv.OpenCvCameraFactory
 import org.openftc.easyopencv.OpenCvCameraRotation
 import org.openftc.easyopencv.OpenCvWebcam
 
-/*
-FTC Dashboard: http://192.168.43.1:8080/dash
- */
-
-@Autonomous(name="Left Side TEST Auto")
-class LeftTestAuto : LinearOpMode() {
+@Autonomous(name="Right Side Auto")
+class RightSideAuto : LinearOpMode() {
     lateinit var webcam : OpenCvWebcam
     lateinit var pipeline : SignalSleevePipeline
     lateinit var drivetrain: Drivetrain
@@ -80,7 +74,6 @@ class LeftTestAuto : LinearOpMode() {
 
     }
 
-
     private fun scoreFirstCone(){
         drivetrain.encoderReset()
         lift.reset()
@@ -101,11 +94,11 @@ class LeftTestAuto : LinearOpMode() {
     }
 
     private fun recenterToTargetCone(){
-        while (drivetrain.frontRight.currentPosition > LeftStrafeAuto && opModeIsActive()) {
-            drivetrain.holonomicDrive(0.0, -0.2, 0.0)
+        while (drivetrain.frontRight.currentPosition < RIGHT_STRAFE_AUTO && opModeIsActive()) {
+            drivetrain.holonomicDrive(0.0, 0.2, 0.0)
         }
         drivetrain.holonomicDrive(0.0,0.0,0.0)
-        drivetrain.tankDrive(0.3,0.2)
+        drivetrain.tankDrive(0.2,0.3)
         sleep(1000)
         drivetrain.tankDrive(0.0,0.0)
         drivetrain.encoderReset()
@@ -122,8 +115,8 @@ class LeftTestAuto : LinearOpMode() {
         claw.toggleGrab()
 
         val baseAngle = drivetrain.imu.angle.firstAngle
-        while(drivetrain.imu.angle.firstAngle > (baseAngle + LEFT_TARGET_CONE_ANGLE) && opModeIsActive()){
-            drivetrain.tankDrive(-0.2,0.2)
+        while(drivetrain.imu.angle.firstAngle < (baseAngle + RIGHT_TARGET_CONE_ANGLE) && opModeIsActive()){
+            drivetrain.tankDrive(0.2,-0.2)
         }
         drivetrain.tankDrive(0.0,0.0)
         drivetrain.encoderReset()
@@ -145,20 +138,17 @@ class LeftTestAuto : LinearOpMode() {
         drivetrain.tankDrive(0.0,0.0)
 
         val oldAngle = drivetrain.imu.angle.firstAngle
-        while (drivetrain.imu.angle.firstAngle < (oldAngle + LEFT_PARKING_ANGLE) && opModeIsActive()){
-            drivetrain.tankDrive(0.2,-0.2)
+        while (drivetrain.imu.angle.firstAngle < (oldAngle + RIGHT_PARKING_ANGLE) && opModeIsActive()){
+            drivetrain.tankDrive(-0.2,0.2)
         }
-         drivetrain.tankDrive(0.0,0.0)
+        drivetrain.tankDrive(0.0,0.0)
         drivetrain.encoderReset()
     }
-
-
-
 
     private fun park(zone :Int){
 
         if(zone == 1){
-            while(drivetrain.imu.angle.firstAngle < LEFT_TURN  && opModeIsActive()) {
+            while(drivetrain.imu.angle.firstAngle < (LEFT_TURN -0.15)  && opModeIsActive()) {
                 drivetrain.tankDrive(0.3,-0.3)
             }
             drivetrain.tankDrive(0.0,0.0)
@@ -169,10 +159,10 @@ class LeftTestAuto : LinearOpMode() {
             }
             drivetrain.tankDrive(0.0,0.0)
 
-        } else if(zone == 3){
-            while (drivetrain.imu.angle.firstAngle > RIGHT_TURN && opModeIsActive()){
-                drivetrain.tankDrive(-0.3,0.3)
-            }
+         } else if(zone == 3){
+             while (drivetrain.imu.angle.firstAngle > RIGHT_TURN && opModeIsActive()){
+                 drivetrain.tankDrive(-0.3,0.3)
+             }
             drivetrain.tankDrive(0.0,0.0)
             drivetrain.encoderReset()
             while (drivetrain.frontRight.currentPosition > LEFT_ZONE_3 && opModeIsActive()){
@@ -180,10 +170,8 @@ class LeftTestAuto : LinearOpMode() {
             }
             drivetrain.tankDrive(0.0,0.0)
 
-        } else { // when Zone is two and it should do nothing
+            } else { // when Zone is two and it should do nothing
 
+            }
         }
-
-    }
-
 }
