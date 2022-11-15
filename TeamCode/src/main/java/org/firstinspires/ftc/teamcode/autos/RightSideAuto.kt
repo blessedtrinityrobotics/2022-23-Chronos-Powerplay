@@ -148,24 +148,24 @@ class RightSideAuto : LinearOpMode() {
     private fun park(zone :Int){
 
         if(zone == 1){
-            while(drivetrain.imu.angle.firstAngle < (LEFT_TURN -0.15)  && opModeIsActive()) {
+            while(drivetrain.imu.angle.firstAngle < (LEFT_TURN - TURN_OFFSET)  && opModeIsActive()) {
                 drivetrain.tankDrive(0.3,-0.3)
             }
             drivetrain.tankDrive(0.0,0.0)
             sleep(1000)
             drivetrain.encoderReset()
-            while (drivetrain.frontRight.currentPosition > LEFT_ZONE_1 && opModeIsActive()){
+            while (drivetrain.frontRight.currentPosition > RIGHT_ZONE_1 && opModeIsActive()){
                 drivetrain.tankDrive(-0.3, -0.3)
             }
             drivetrain.tankDrive(0.0,0.0)
 
          } else if(zone == 3){
-             while (drivetrain.imu.angle.firstAngle > RIGHT_TURN && opModeIsActive()){
+             while (drivetrain.imu.angle.firstAngle > (RIGHT_TURN + TURN_OFFSET)&& opModeIsActive()){
                  drivetrain.tankDrive(-0.3,0.3)
              }
             drivetrain.tankDrive(0.0,0.0)
             drivetrain.encoderReset()
-            while (drivetrain.frontRight.currentPosition > LEFT_ZONE_3 && opModeIsActive()){
+            while (drivetrain.frontRight.currentPosition > RIGHT_ZONE_3 && opModeIsActive()){
                 drivetrain.tankDrive(-0.3, -0.3)
             }
             drivetrain.tankDrive(0.0,0.0)

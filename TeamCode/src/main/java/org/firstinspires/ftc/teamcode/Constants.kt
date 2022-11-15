@@ -41,4 +41,7 @@ const val LEFT_ZONE_3 = -800
 const val RIGHT_TARGET_CONE_ANGLE = .5344
 const val RIGHT_PARKING_ANGLE = -.55
 const val RIGHT_STRAFE_AUTO = 625
+const val RIGHT_ZONE_1 = -800
+const val RIGHT_ZONE_3 = -950
+const val TURN_OFFSET = 0.15
 
