@@ -2,7 +2,7 @@ package org.firstinspires.ftc.teamcode.autos
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous
 import org.firstinspires.ftc.teamcode.FIRST_CONE_HEIGHT
-
+   
 @Autonomous(name="RIGHT AUTO")
 class RightSideAuto: BaseAuto() {
 
