@@ -1,30 +1,34 @@
 package org.firstinspires.ftc.teamcode.autos
 
 import com.acmerobotics.dashboard.FtcDashboard
-import com.qualcomm.robotcore.eventloop.opmode.Autonomous
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName
 import org.firstinspires.ftc.teamcode.*
+import org.firstinspires.ftc.teamcode.hardware.Claw
 import org.firstinspires.ftc.teamcode.hardware.Drivetrain
+import org.firstinspires.ftc.teamcode.hardware.Lift
 import org.openftc.easyopencv.OpenCvCamera
-
 import org.openftc.easyopencv.OpenCvCameraFactory
 import org.openftc.easyopencv.OpenCvCameraRotation
 import org.openftc.easyopencv.OpenCvWebcam
 
-/*
-FTC Dashboard: http://192.168.43.1:8080/dash
- */
 
-@Autonomous(name="Base Auto")
-class BaseAuto : LinearOpMode() {
+abstract class BaseAuto: LinearOpMode() {
+    lateinit var drivetrain: Drivetrain
+    lateinit var claw: Claw
+    lateinit var lift: Lift
     lateinit var webcam : OpenCvWebcam
     lateinit var pipeline : SignalSleevePipeline
-    lateinit var drivetrain: Drivetrain
+    var zone = 0
 
-    override fun runOpMode() {
+    abstract fun auto()
+
+
+
+    fun setUp() {
         drivetrain = Drivetrain(hardwareMap)
-
+        claw = Claw(hardwareMap)
+        lift = Lift(hardwareMap)
         pipeline = SignalSleevePipeline()
 
         val cameraMonitorViewId = hardwareMap.appContext.resources.getIdentifier(
@@ -47,55 +51,86 @@ class BaseAuto : LinearOpMode() {
         })
 
         FtcDashboard.getInstance().startCameraStream(webcam, 30.0)
-
-        waitForStart()
-
-        while (opModeIsActive()) {
-
-            getToCone()
-            sleep(1000)
-            val zone = pipeline.zone
-            park(zone)
-
-            stop()
-        }
-
     }
 
-    private fun getToCone(){
-        while ( drivetrain.frontRight.currentPosition > AUTO_CONE_DISTANCE && opModeIsActive()){
-            drivetrain.tankDrive(-0.3,-0.3)
+    fun encoderDrive(power: Double, distanceInInches: Double){
+        drivetrain.encoderReset()
+        if (distanceInInches < 0){
+            while (drivetrain.frontRight.currentPosition < (distanceInInches  * ((-550)/(4*Math.PI))) && opModeIsActive()){
+                drivetrain.tankDrive(power,power)
+            }
+        } else if (distanceInInches > 0) {
+            while (drivetrain.frontRight.currentPosition > (distanceInInches  * ((-550)/(4*Math.PI))) && opModeIsActive()){
+                drivetrain.tankDrive(-power,-power)
+            }
         }
         drivetrain.tankDrive(0.0,0.0)
+        drivetrain.encoderReset()
+    }
+
+    fun timeByPower(power: Double, time: Long){
+        drivetrain.tankDrive(-power,-power)
+        sleep(time)
+        drivetrain.tankDrive(0.0,0.0)
+
+    }
+    
+    fun imuTurn(power: Double, angleInPi: Double){
+        drivetrain.encoderReset()
+        val oldAngle = drivetrain.imu.angle.firstAngle
+
+        if(angleInPi < 0){
+            while (drivetrain.imu.angle.firstAngle > (oldAngle + angleInPi) && opModeIsActive()){
+                drivetrain.tankDrive(-power,power)
+            }
+            drivetrain.tankDrive(0.0,0.0)
+        } else if(angleInPi > 0){
+            while (drivetrain.imu.angle.firstAngle < (oldAngle + angleInPi) && opModeIsActive()){
+                drivetrain.tankDrive(power,-power)
+            }
+            drivetrain.tankDrive(0.0,0.0)
+        }
+        drivetrain.encoderReset()
+    }
+
+    fun holonomicDriveEncoder(power: Double, distanceInTicks: Double){
+        drivetrain.encoderReset()
+        if (distanceInTicks < 0){
+            while (drivetrain.frontRight.currentPosition > distanceInTicks && opModeIsActive()){
+                drivetrain.holonomicDrive(0.0, -power, 0.0)
+            }
+        } else if(distanceInTicks > 0){
+            while (drivetrain.frontRight.currentPosition < distanceInTicks && opModeIsActive()) {
+                drivetrain.holonomicDrive(0.0, power, 0.0)
+            }
+        }
+        drivetrain.holonomicDrive(0.0,0.0,0.0)
+        drivetrain.encoderReset()
     }
 
     private fun park(zone :Int){
-        while ( drivetrain.frontRight.currentPosition > AUTO_SET_DISTANCE && opModeIsActive()){
-            drivetrain.tankDrive(-0.3,-0.3)
-        }
-        drivetrain.tankDrive(0.0,0.0)
-
-        sleep(1000)
+        drivetrain.encoderReset()
+        encoderDrive(0.2, 7.0)
 
         if(zone == 1){
-            while(drivetrain.imu.angle.firstAngle < LEFT_TURN  && opModeIsActive()) {
+            while(drivetrain.imu.angle.firstAngle <  (LEFT_TURN - TURN_OFFSET)  && opModeIsActive()) {
                 drivetrain.tankDrive(0.3,-0.3)
             }
             drivetrain.tankDrive(0.0,0.0)
             sleep(1000)
             drivetrain.encoderReset()
-            while (drivetrain.frontRight.currentPosition > AUTO_PARK_DISTANCE && opModeIsActive()){
+            while (drivetrain.frontRight.currentPosition > LEFT_ZONE_1 && opModeIsActive()){
                 drivetrain.tankDrive(-0.3, -0.3)
             }
             drivetrain.tankDrive(0.0,0.0)
 
         } else if(zone == 3){
-            while (drivetrain.imu.angle.firstAngle > RIGHT_TURN && opModeIsActive()){
+            while (drivetrain.imu.angle.firstAngle > (RIGHT_TURN + TURN_OFFSET) && opModeIsActive()){
                 drivetrain.tankDrive(-0.3,0.3)
             }
             drivetrain.tankDrive(0.0,0.0)
             drivetrain.encoderReset()
-            while (drivetrain.frontRight.currentPosition > AUTO_PARK_DISTANCE && opModeIsActive()){
+            while (drivetrain.frontRight.currentPosition > LEFT_ZONE_3 && opModeIsActive()){
                 drivetrain.tankDrive(-0.3, -0.3)
             }
             drivetrain.tankDrive(0.0,0.0)
@@ -104,6 +139,14 @@ class BaseAuto : LinearOpMode() {
 
         }
 
+    }
+
+
+    override fun runOpMode(){
+        setUp()
+        auto()
+        park(zone)
+        stop()
     }
 
 }

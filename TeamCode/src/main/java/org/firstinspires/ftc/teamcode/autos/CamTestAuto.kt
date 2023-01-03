@@ -50,7 +50,6 @@ class CamTestAuto : LinearOpMode() {
 
         while(opModeIsActive()) {
             telemetry.addData("Zone", pipeline.zone)
-            telemetry.addData("Test", LeftStrafeAuto)
             telemetry.update()
         }
 

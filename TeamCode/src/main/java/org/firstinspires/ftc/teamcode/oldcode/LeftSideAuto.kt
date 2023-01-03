@@ -1,7 +1,8 @@
-package org.firstinspires.ftc.teamcode.autos
+package org.firstinspires.ftc.teamcode.oldcode
 
 import com.acmerobotics.dashboard.FtcDashboard
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous
+import com.qualcomm.robotcore.eventloop.opmode.Disabled
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName
 import org.firstinspires.ftc.teamcode.*
@@ -18,9 +19,9 @@ import org.openftc.easyopencv.OpenCvWebcam
 /*
 FTC Dashboard: http://192.168.43.1:8080/dash
  */
-
+@Disabled
 @Autonomous(name="Left Side TEST Auto")
-class LeftTestAuto : LinearOpMode() {
+class LeftSideAuto : LinearOpMode() {
     lateinit var webcam : OpenCvWebcam
     lateinit var pipeline : SignalSleevePipeline
     lateinit var drivetrain: Drivetrain
@@ -66,7 +67,8 @@ class LeftTestAuto : LinearOpMode() {
             getToTargetCone()
             sleep(1000)
             val zone = pipeline.zone
-            scoreTargetCone()
+            parkingCenter() // only used due to scoreTargetCone() not being allowed
+//            scoreTargetCone()
             sleep(1000)
             park(zone)
 
@@ -130,7 +132,7 @@ class LeftTestAuto : LinearOpMode() {
         sleep(1000)
         lift.positionSetter(SECOND_POLE_HEIGHT)
         sleep(1000)
-        while(drivetrain.frontRight.currentPosition > SECOND_POLE_DISTANCE && opModeIsActive()){
+        while(drivetrain.frontRight.currentPosition > LEFT_SECOND_POLE_DISTANCE && opModeIsActive()){
             drivetrain.tankDrive(-0.2,-0.2)
         }
         drivetrain.tankDrive(0.0,0.0)
@@ -156,9 +158,10 @@ class LeftTestAuto : LinearOpMode() {
 
 
     private fun park(zone :Int){
+        drivetrain.encoderReset()
 
         if(zone == 1){
-            while(drivetrain.imu.angle.firstAngle < LEFT_TURN  && opModeIsActive()) {
+            while(drivetrain.imu.angle.firstAngle <  (LEFT_TURN - TURN_OFFSET)  && opModeIsActive()) {
                 drivetrain.tankDrive(0.3,-0.3)
             }
             drivetrain.tankDrive(0.0,0.0)
@@ -170,7 +173,7 @@ class LeftTestAuto : LinearOpMode() {
             drivetrain.tankDrive(0.0,0.0)
 
         } else if(zone == 3){
-            while (drivetrain.imu.angle.firstAngle > RIGHT_TURN && opModeIsActive()){
+            while (drivetrain.imu.angle.firstAngle > (RIGHT_TURN + TURN_OFFSET) && opModeIsActive()){
                 drivetrain.tankDrive(-0.3,0.3)
             }
             drivetrain.tankDrive(0.0,0.0)
@@ -184,6 +187,25 @@ class LeftTestAuto : LinearOpMode() {
 
         }
 
+    }
+
+    private fun parkingCenter(){
+        drivetrain.encoderReset()
+        while (drivetrain.frontRight.currentPosition > CENTER_PARKING_DISTANCE && opModeIsActive()){
+            drivetrain.tankDrive(-.2,-.2)
+        }
+        drivetrain.tankDrive(0.0,0.0)
+
+        drivetrain.encoderReset()
+        while (drivetrain.frontRight.currentPosition > PUSH_TARGET_CONE && opModeIsActive()){
+            drivetrain.tankDrive(-0.2,-0.2)
+        }
+        drivetrain.tankDrive(0.0,0.0)
+        while (drivetrain.frontRight.currentPosition < 0 && opModeIsActive()){
+            drivetrain.tankDrive(0.2,0.2)
+        }
+        drivetrain.tankDrive(0.0,0.0)
+        drivetrain.encoderReset()
     }
 
 }

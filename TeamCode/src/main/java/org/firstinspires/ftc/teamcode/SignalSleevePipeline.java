@@ -33,7 +33,7 @@ public class SignalSleevePipeline extends OpenCvPipeline {
         // Step HSV_Threshold1:
         Mat zone2Input = blurOutput;
         double[] zone2Hue = {56, 85};
-        double[] zone2Saturation = {91, 145};
+        double[] zone2Saturation = {85, 145};
         double[] zone2Value = {50, 151};
         hsvThreshold(zone2Input, zone2Hue, zone2Saturation, zone2Value, zone2Output);
 
@@ -50,11 +50,12 @@ public class SignalSleevePipeline extends OpenCvPipeline {
 
         if (zone1Count > Math.max(zone2Count, zone3Count)) {
             zone = 1;
-        } else if (zone2Count > Math.max(zone1Count, zone3Count)) {
-            zone = 2;
-        } else {
+        } else if (zone3Count > Math.max(zone1Count, zone2Count)) {
             zone = 3;
+        } else {
+            zone = 2;
         }
+
 
         Imgproc.putText(
                 source0,
@@ -62,7 +63,7 @@ public class SignalSleevePipeline extends OpenCvPipeline {
                 new Point(10, 20),
                 Imgproc.FONT_HERSHEY_PLAIN, 1,
                 new Scalar(255, 255, 255), 3);
-        return source0;
+        return zone2Output;
     }
 
     /**
