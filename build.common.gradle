@@ -54,6 +54,7 @@ android {
         minSdkVersion 23
         //noinspection ExpiredTargetSdkVersion
         targetSdkVersion 28
+//         multiDexEnabled true // used if build fails due to roadrunner
 
         /**
          * We keep the versionCode and versionName of robot controller applications in sync with
