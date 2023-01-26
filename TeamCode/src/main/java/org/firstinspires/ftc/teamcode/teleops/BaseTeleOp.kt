@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.teleops
 
 import com.qualcomm.robotcore.eventloop.opmode.OpMode
 import com.qualcomm.robotcore.hardware.DcMotor
+import org.firstinspires.ftc.teamcode.hardware.Antenna
 import org.firstinspires.ftc.teamcode.hardware.Claw
 import org.firstinspires.ftc.teamcode.hardware.Drivetrain
 import org.firstinspires.ftc.teamcode.hardware.Lift
@@ -13,8 +14,10 @@ abstract class BaseTeleOp : OpMode() {
     lateinit var drivetrain: Drivetrain
     lateinit var claw: Claw
     lateinit var lift: Lift
+    lateinit var antenna: Antenna
 
     var isClawButtonPressed = false
+    var isAntennaButtonPressed = false
 
     abstract fun drive()
 
@@ -22,6 +25,7 @@ abstract class BaseTeleOp : OpMode() {
         drivetrain = Drivetrain(hardwareMap)
         claw = Claw(hardwareMap)
         lift = Lift(hardwareMap)
+        antenna = Antenna(hardwareMap)
     }
 
     override fun loop() {
@@ -35,6 +39,13 @@ abstract class BaseTeleOp : OpMode() {
         }
         if (!gamepad2.a)
             isClawButtonPressed = false
+
+        if (gamepad2.b && !isAntennaButtonPressed){
+            isAntennaButtonPressed = true
+            antenna.toggleGrab()
+        }
+        if(!gamepad2.b)
+            isAntennaButtonPressed = false
 
         if (gamepad2.y)
             lift.reset()

@@ -63,7 +63,7 @@ public class SignalSleevePipeline extends OpenCvPipeline {
                 new Point(10, 20),
                 Imgproc.FONT_HERSHEY_PLAIN, 1,
                 new Scalar(255, 255, 255), 3);
-        return zone2Output;
+        return source0;
     }
 
     /**

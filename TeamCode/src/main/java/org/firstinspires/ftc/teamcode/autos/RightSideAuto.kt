@@ -12,7 +12,7 @@ class RightSideAuto: BaseAuto() {
         waitForStart()
         holonomicDriveEncoder(0.25, -425.0)
         lift.positionSetter(FIRST_CONE_HEIGHT)
-        encoderDrive(0.15,8.0)
+        encoderDrive(0.15,6.0)
         claw.toggleGrab()
         lift.positionSetter(0)
         encoderDrive(0.3,-8.0)
@@ -21,8 +21,8 @@ class RightSideAuto: BaseAuto() {
         encoderDrive(0.3,22.0)
         sleep(1000)
         zone = pipeline.zone
-        encoderDrive(0.15,8.0)
-        encoderDrive(0.15,-8.0)
+        encoderDrive(0.15,15.0)
+        encoderDrive(0.15,-15.0)
     }
 
 }

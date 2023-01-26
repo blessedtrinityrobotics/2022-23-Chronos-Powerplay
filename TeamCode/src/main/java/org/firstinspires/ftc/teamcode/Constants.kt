@@ -11,6 +11,9 @@ const val RIGHT_CLAW_SERVO = "right_claw"
 const val LIFT_MOTOR = "lift"
 const val LIFT_TOUCH_SENSOR = "lift_touch"
 
+const val ANTENNA_LEFT = "antenna_left"
+const val ANTENNA_RIGHT = "antenna_right"
+
 const val CRAWL_SPEED = 0.1
 
 
@@ -38,7 +41,7 @@ const val LEFT_SECOND_POLE_DISTANCE =-500
 const val LEFT_PARKING_ANGLE = 0.55
 const val LEFT_STRAFE_AUTO = -625
 const val LEFT_ZONE_1 = -950
-const val LEFT_ZONE_3 = -800
+const val LEFT_ZONE_3 = -850
 
 //Used in Right Auto Only
 const val RIGHT_TARGET_CONE_ANGLE = .5344

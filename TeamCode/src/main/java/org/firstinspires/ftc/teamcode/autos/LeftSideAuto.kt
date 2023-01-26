@@ -22,7 +22,7 @@ class LeftSideAuto: BaseAuto() {
         encoderDrive(0.3,22.0)
         sleep(1000)
         zone = pipeline.zone
-        encoderDrive(0.15,8.0)
-        encoderDrive(0.15,-8.0)
+        encoderDrive(0.15,15.0)
+        encoderDrive(0.15,-15.0)
     }
 }

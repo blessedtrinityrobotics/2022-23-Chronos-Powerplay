@@ -7,9 +7,9 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode
 import org.firstinspires.ftc.teamcode.roadrunner.drive.SampleMecanumDrive
 
 
-@Autonomous(name="RR 10 TEST Auto")
+@Autonomous(name="RR 40 TEST Auto")
 
-class TestAuto: LinearOpMode() {
+class OtherTestAuto: LinearOpMode() {
     lateinit var drive: SampleMecanumDrive
 
 
@@ -21,7 +21,7 @@ class TestAuto: LinearOpMode() {
 
         drive.poseEstimate = startPose
         var trajSeq = drive.trajectorySequenceBuilder(Pose2d())
-            .forward(10.0)
+            .forward(40.0)
             .build()
 
         waitForStart()
