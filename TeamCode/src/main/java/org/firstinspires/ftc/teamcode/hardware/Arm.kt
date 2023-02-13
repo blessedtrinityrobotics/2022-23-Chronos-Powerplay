@@ -24,7 +24,9 @@ class Arm (hardwareMap: HardwareMap) {
         private set
 
     init {
-
+        claw.position = 0.075
+        armLift.position = 0.9166666
+        armStabilizer.position = 0.0
     }
 
     fun init(){
@@ -35,7 +37,7 @@ class Arm (hardwareMap: HardwareMap) {
 
     fun toggleGrab(){
         isGrabbing = !isGrabbing
-        claw.position = if(isGrabbing) 0.275 else 0.075
+        claw.position = if(isGrabbing) 0.35 else 0.075
     }
 
     fun toggleArmLiftPos(){

@@ -11,6 +11,9 @@ const val ARM_ROTATOR = "arm_rotator"
 const val ARM_LIFT = "arm_lift"
 const val ARM_STABILIZER = "arm_stabilizer"
 
+const val RIGHT_SERVO_SETTER = "right_servo_setter"
+const val LEFT_SERVO_SETTER = "left_servo_setter"
+
 const val LEFT_CLAW_SERVO = "left_claw"
 const val RIGHT_CLAW_SERVO = "right_claw"
 

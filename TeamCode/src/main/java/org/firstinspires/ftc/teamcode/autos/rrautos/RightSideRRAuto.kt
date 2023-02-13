@@ -83,7 +83,7 @@ class RightSideRRAuto: BasedRoadRunnerAuto() {
         //places first cone
         lift.positionSetter(FIRST_CONE_HEIGHT)
         drive.followTrajectorySequence(getToFirstPole)
-        claw.toggleGrab()
+//        claw.toggleGrab()
         lift.positionSetter(0)
 
         //goes to Signal Cone and pushes it out of the way
@@ -94,12 +94,12 @@ class RightSideRRAuto: BasedRoadRunnerAuto() {
         //stacks first cone from the stack to the middle junction
         lift.positionSetter(FIRST_CONE_STACK_HEIGHT)
         drive.followTrajectorySequence(getToConeStackFirstTime)
-        claw.toggleGrab()
+//        claw.toggleGrab()
         sleep(1000)
         lift.positionSetter(MIDDLE_JUNCTION_HEIGHT)
         sleep(500)
         drive.followTrajectorySequence(goToMiddleJunction)
-        claw.toggleGrab()
+//        claw.toggleGrab()
         sleep(250)
         // parking time
         drive.followTrajectorySequence(parkingSetter)

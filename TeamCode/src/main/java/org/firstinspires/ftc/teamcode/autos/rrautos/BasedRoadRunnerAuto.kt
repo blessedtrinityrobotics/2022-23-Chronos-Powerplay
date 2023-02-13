@@ -5,6 +5,7 @@ import com.acmerobotics.roadrunner.geometry.Pose2d
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName
 import org.firstinspires.ftc.teamcode.SignalSleevePipeline
+import org.firstinspires.ftc.teamcode.hardware.Arm
 import org.firstinspires.ftc.teamcode.hardware.Claw
 import org.firstinspires.ftc.teamcode.hardware.Lift
 import org.firstinspires.ftc.teamcode.roadrunner.drive.SampleMecanumDrive
@@ -15,7 +16,7 @@ import org.openftc.easyopencv.OpenCvWebcam
 
 abstract  class BasedRoadRunnerAuto: LinearOpMode() {
     lateinit var drive: SampleMecanumDrive
-    lateinit var claw: Claw
+    lateinit var arm: Arm
     lateinit var lift: Lift
     lateinit var webcam : OpenCvWebcam
     lateinit var pipeline : SignalSleevePipeline
@@ -26,7 +27,7 @@ abstract  class BasedRoadRunnerAuto: LinearOpMode() {
 
     fun setUp() {
         drive = SampleMecanumDrive(hardwareMap)
-        claw = Claw(hardwareMap)
+        arm = Arm(hardwareMap)
         lift = Lift(hardwareMap)
         pipeline = SignalSleevePipeline()
 
@@ -54,7 +55,7 @@ abstract  class BasedRoadRunnerAuto: LinearOpMode() {
 
     override fun runOpMode() {
         setUp()
-        claw.toggleGrab()
+        arm.init()
         waitForStart()
         auto()
     }

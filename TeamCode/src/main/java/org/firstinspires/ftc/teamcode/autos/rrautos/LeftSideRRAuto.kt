@@ -22,89 +22,44 @@ class LeftSideRRAuto: BasedRoadRunnerAuto() {
             .forward(2.0)
             .build()
 
-        var goToSignalCone =drive.trajectorySequenceBuilder(Pose2d())
-            .forward(-2.0)
-            .turn(Math.toRadians(45.0))
-            .forward(8.0)
-            .turn(Math.toRadians(-15.0))
-            .forward(4.0)
+        var getToSignalCone =  drive.trajectorySequenceBuilder(Pose2d())
+            .forward(21.0)
             .build()
 
-        var pushAwaySignalCone = drive.trajectorySequenceBuilder(Pose2d())
-            .forward(34.0)
-            .waitSeconds(0.25)
-            .forward(3.0)
-            .waitSeconds(0.25)
-            .forward(-5.0)
-            .build()
-
-        var getToConeStackFirstTime =drive.trajectorySequenceBuilder(Pose2d())
-            .turn(Math.toRadians(80.0))
-            .forward(22.0)
-            .build()
-
-        var forward2In = drive.trajectorySequenceBuilder(Pose2d())
-            .forward(2.0)
-            .build()
-
-        var goToMiddleJunction = drive.trajectorySequenceBuilder(Pose2d())
-            .forward(-10.0)
-            .turn(Math.toRadians(130.0))
-            .forward(19.5)
-            .build()
-
-        var goToStack = drive.trajectorySequenceBuilder(Pose2d())
-            .forward(-17.0)
-            .turn(Math.toRadians(-141.5))
-            .forward(10.0)
-            .build()
-
-        var parkingSetter = drive.trajectorySequenceBuilder(Pose2d())
-            .turn(Math.toRadians(-15.0))
-            .forward(-8.5)
-            .turn(Math.toRadians(35.0))
-            .build()
-
-        var zoneOne = drive.trajectorySequenceBuilder(Pose2d())
-            .forward(-15.0)
-            .build()
-
-        var zoneTwo = drive.trajectorySequenceBuilder(Pose2d())
-            .forward(-5.0)
-            .build()
-
-        var zoneThree = drive.trajectorySequenceBuilder(Pose2d())
-            .forward(15.0)
+        var getHighJunctionFirstTime = drive.trajectorySequenceBuilder(Pose2d())
+            .lineToSplineHeading(Pose2d(10.0,0.0, Math.toRadians(90.0)))
             .build()
 
 
+        // gets to signal cone
+        drive.followTrajectorySequence(getToSignalCone)
+        sleep(1500)
+        drive.followTrajectorySequence(getHighJunctionFirstTime)
 
         //places first cone
-        lift.positionSetter(FIRST_CONE_HEIGHT)
-        drive.followTrajectorySequence(getToFirstPole)
-        claw.toggleGrab()
-        sleep(100)
-        lift.positionSetter(0)
+
+
+
 
         //goes to Signal Cone and pushes it out of the way
-        drive.followTrajectorySequence(goToSignalCone)
-        zone = pipeline.zone
-        drive.followTrajectorySequence(pushAwaySignalCone)
-
-        //stacks first cone from the stack to the middle junction
-        lift.positionSetter(FIRST_CONE_STACK_HEIGHT)
-        drive.followTrajectorySequence(getToConeStackFirstTime)
-        claw.toggleGrab()
-        sleep(1000)
-        lift.positionSetter(MIDDLE_JUNCTION_HEIGHT)
-        sleep(500)
-        drive.followTrajectorySequence(goToMiddleJunction)
-        claw.toggleGrab()
-        sleep(250)
-        lift.positionSetter(0)
-
-        // parking time
-        drive.followTrajectorySequence(parkingSetter)
+//        drive.followTrajectorySequence(goToSignalCone)
+//        zone = pipeline.zone
+//        drive.followTrajectorySequence(pushAwaySignalCone)
+//
+//        //stacks first cone from the stack to the middle junction
+//        lift.positionSetter(FIRST_CONE_STACK_HEIGHT)
+//        drive.followTrajectorySequence(getToConeStackFirstTime)
+//        claw.toggleGrab()
+//        sleep(1000)
+//        lift.positionSetter(MIDDLE_JUNCTION_HEIGHT)
+//        sleep(500)
+//        drive.followTrajectorySequence(goToMiddleJunction)
+//        claw.toggleGrab()
+//        sleep(250)
+//        lift.positionSetter(0)
+//
+//        // parking time
+//        drive.followTrajectorySequence(parkingSetter)
 
 //        if(zone == 1){
 //            drive.followTrajectorySequence(zoneOne)
