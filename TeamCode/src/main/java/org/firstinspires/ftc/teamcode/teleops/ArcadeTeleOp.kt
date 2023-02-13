@@ -1,10 +1,11 @@
 package org.firstinspires.ftc.teamcode.teleops
 
+import com.qualcomm.robotcore.eventloop.opmode.Disabled
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp
 import org.firstinspires.ftc.teamcode.smoothInput
 import kotlin.math.pow
 import kotlin.math.sign
-
+@Disabled
 @TeleOp(name="Arcade TeleOp")
 class ArcadeTeleOp : BaseTeleOp() {
     override fun drive() {

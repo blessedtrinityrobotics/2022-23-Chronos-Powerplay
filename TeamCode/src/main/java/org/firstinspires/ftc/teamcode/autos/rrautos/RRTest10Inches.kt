@@ -1,7 +1,6 @@
 package org.firstinspires.ftc.teamcode.autos.rrautos
 
 import com.acmerobotics.roadrunner.geometry.Pose2d
-import com.acmerobotics.roadrunner.geometry.Vector2d
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode
 import org.firstinspires.ftc.teamcode.roadrunner.drive.SampleMecanumDrive
@@ -9,7 +8,7 @@ import org.firstinspires.ftc.teamcode.roadrunner.drive.SampleMecanumDrive
 
 @Autonomous(name="RR 10 TEST Auto")
 
-class TestAuto: LinearOpMode() {
+class RRTest10Inches: LinearOpMode() {
     lateinit var drive: SampleMecanumDrive
 
 

@@ -40,8 +40,8 @@ class Drivetrain(val hardwareMap: HardwareMap) {
     fun holonomicDrive(throttle: Double, strafe: Double, steer: Double) {
         val total = abs(throttle) + abs(strafe) + abs(steer)
         val scale = max(total,1.0)
-        frontLeft.power = (throttle + strafe - steer) / scale
-        backLeft.power = (throttle - strafe - steer) / scale
+        frontLeft.power = (throttle - strafe - steer) / scale
+        backLeft.power = (throttle + strafe - steer) / scale
         frontRight.power = (throttle + strafe + steer) / scale
         backRight.power = (throttle - strafe + steer) / scale
 

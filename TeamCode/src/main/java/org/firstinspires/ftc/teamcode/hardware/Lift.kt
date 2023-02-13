@@ -45,7 +45,7 @@ class Lift(private val hardwareMap: HardwareMap) {
         if (power != 0.0) {
             liftMotor.targetPosition = Range.clip(
                 liftMotor.currentPosition + (1000 * power).toInt(), // Edit the target relative to the currentPosition for use with joysticks
-                0 - encoderOffset, 4500) // Subtract the encoder offset so you can go down in a pinch
+                0 - encoderOffset, 2150) // Subtract the encoder offset so you can go down in a pinch
             liftMotor.mode = DcMotor.RunMode.RUN_TO_POSITION
         }
 

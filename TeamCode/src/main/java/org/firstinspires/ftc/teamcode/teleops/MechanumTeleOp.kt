@@ -1,10 +1,11 @@
 ﻿package org.firstinspires.ftc.teamcode.teleops
 
+import com.qualcomm.robotcore.eventloop.opmode.Disabled
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp
 import com.qualcomm.robotcore.util.Range
 import org.firstinspires.ftc.teamcode.CRAWL_SPEED
 import org.firstinspires.ftc.teamcode.smoothInput
-
+@Disabled
 @TeleOp(name="Mechanum TeleOp")
 class MechanumTeleOp : BaseTeleOp() {
     override fun drive() {

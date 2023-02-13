@@ -1,8 +1,10 @@
 package org.firstinspires.ftc.teamcode.autos
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous
+import com.qualcomm.robotcore.eventloop.opmode.Disabled
 import org.firstinspires.ftc.teamcode.FIRST_CONE_HEIGHT
 
+@Disabled
 @Autonomous(name="LEFT AUTO")
 class LeftSideAuto: BaseAuto() {
 
@@ -13,7 +15,7 @@ class LeftSideAuto: BaseAuto() {
         holonomicDriveEncoder(0.25, 450.0)
 //        encoderDrive(0.2,-2.0)
         lift.positionSetter(FIRST_CONE_HEIGHT)
-        encoderDrive(0.15,8.0)
+        encoderDrive(0.15,7.5)
         claw.toggleGrab()
         lift.positionSetter(0)
         encoderDrive(0.3,-8.0)

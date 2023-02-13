@@ -25,15 +25,15 @@ public class SignalSleevePipeline extends OpenCvPipeline {
 
         // Step HSV_Threshold0:
         Mat zone3Input = blurOutput;
-        double[] zone3Hue = {87, 105};
+        double[] zone3Hue = {87, 125};
         double[] zone3Saturation = {94, 255};
         double[] zone3Value = {87, 255};
         hsvThreshold(zone3Input, zone3Hue, zone3Saturation, zone3Value, zone3Output);
 
         // Step HSV_Threshold1:
         Mat zone2Input = blurOutput;
-        double[] zone2Hue = {56, 85};
-        double[] zone2Saturation = {85, 145};
+        double[] zone2Hue = {50, 85};
+        double[] zone2Saturation = {60, 145};
         double[] zone2Value = {50, 151};
         hsvThreshold(zone2Input, zone2Hue, zone2Saturation, zone2Value, zone2Output);
 

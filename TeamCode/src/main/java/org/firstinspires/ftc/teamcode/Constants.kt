@@ -5,6 +5,12 @@ const val FRONT_RIGHT_MOTOR = "front_right"
 const val BACK_LEFT_MOTOR = "back_left"
 const val BACK_RIGHT_MOTOR = "back_right"
 
+
+const val CLAW = "claw"
+const val ARM_ROTATOR = "arm_rotator"
+const val ARM_LIFT = "arm_lift"
+const val ARM_STABILIZER = "arm_stabilizer"
+
 const val LEFT_CLAW_SERVO = "left_claw"
 const val RIGHT_CLAW_SERVO = "right_claw"
 
@@ -40,7 +46,7 @@ const val LEFT_TARGET_CONE_ANGLE = -.5344
 const val LEFT_SECOND_POLE_DISTANCE =-500
 const val LEFT_PARKING_ANGLE = 0.55
 const val LEFT_STRAFE_AUTO = -625
-const val LEFT_ZONE_1 = -950
+const val LEFT_ZONE_1 = -900
 const val LEFT_ZONE_3 = -850
 
 //Used in Right Auto Only
@@ -51,3 +57,11 @@ const val RIGHT_ZONE_1 = -800
 const val RIGHT_ZONE_3 = -950
 const val TURN_OFFSET = 0.15
 
+// cone stack height
+const val FIRST_CONE_STACK_HEIGHT = 680 //highest cone on the stack
+
+const val CONE_FREEDOM_HEIGHT = 1400 //Height used to free cone from stack
+
+
+//junction heights
+const val MIDDLE_JUNCTION_HEIGHT = 2950

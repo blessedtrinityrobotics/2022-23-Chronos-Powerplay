@@ -6,8 +6,8 @@ import org.firstinspires.ftc.teamcode.FIRST_CONE_HEIGHT
 import org.firstinspires.ftc.teamcode.FIRST_CONE_STACK_HEIGHT
 import org.firstinspires.ftc.teamcode.MIDDLE_JUNCTION_HEIGHT
 
-@Autonomous(name="LeftSideRRAuto")
-class LeftSideRRAuto: BasedRoadRunnerAuto() {
+@Autonomous(name="RightSideRRAuto")
+class RightSideRRAuto: BasedRoadRunnerAuto() {
 
 
 
@@ -17,16 +17,16 @@ class LeftSideRRAuto: BasedRoadRunnerAuto() {
         drive.poseEstimate = startPose
 
         var getToFirstPole = drive.trajectorySequenceBuilder(Pose2d())
-            .forward(8.0)
-            .turn(Math.toRadians(-30.0))
-            .forward(2.0)
+            .forward(10.0)
+            .turn(Math.toRadians(45.0))
+            .forward(1.0)
             .build()
 
         var goToSignalCone =drive.trajectorySequenceBuilder(Pose2d())
-            .forward(-2.0)
-            .turn(Math.toRadians(45.0))
+            .forward(-1.0)
+            .turn(Math.toRadians(-63.0))
             .forward(8.0)
-            .turn(Math.toRadians(-15.0))
+            .turn(Math.toRadians(15.0))
             .forward(4.0)
             .build()
 
@@ -35,12 +35,12 @@ class LeftSideRRAuto: BasedRoadRunnerAuto() {
             .waitSeconds(0.25)
             .forward(3.0)
             .waitSeconds(0.25)
-            .forward(-5.0)
+            .forward(-3.0)
             .build()
 
         var getToConeStackFirstTime =drive.trajectorySequenceBuilder(Pose2d())
-            .turn(Math.toRadians(80.0))
-            .forward(22.0)
+            .turn(Math.toRadians(-85.0))
+            .forward(27.5)
             .build()
 
         var forward2In = drive.trajectorySequenceBuilder(Pose2d())
@@ -49,20 +49,21 @@ class LeftSideRRAuto: BasedRoadRunnerAuto() {
 
         var goToMiddleJunction = drive.trajectorySequenceBuilder(Pose2d())
             .forward(-10.0)
-            .turn(Math.toRadians(130.0))
-            .forward(19.5)
+            .turn(Math.toRadians(-180.0))
+            .forward(20.0)
             .build()
 
         var goToStack = drive.trajectorySequenceBuilder(Pose2d())
             .forward(-17.0)
-            .turn(Math.toRadians(-141.5))
+            .turn(Math.toRadians(141.5))
             .forward(10.0)
             .build()
 
         var parkingSetter = drive.trajectorySequenceBuilder(Pose2d())
-            .turn(Math.toRadians(-15.0))
-            .forward(-8.5)
-            .turn(Math.toRadians(35.0))
+            .forward(-2.0)
+            .turn(Math.toRadians(15.0))
+            .forward(8.5)
+            .turn(Math.toRadians(-35.0))
             .build()
 
         var zoneOne = drive.trajectorySequenceBuilder(Pose2d())
@@ -83,7 +84,6 @@ class LeftSideRRAuto: BasedRoadRunnerAuto() {
         lift.positionSetter(FIRST_CONE_HEIGHT)
         drive.followTrajectorySequence(getToFirstPole)
         claw.toggleGrab()
-        sleep(100)
         lift.positionSetter(0)
 
         //goes to Signal Cone and pushes it out of the way
@@ -101,8 +101,6 @@ class LeftSideRRAuto: BasedRoadRunnerAuto() {
         drive.followTrajectorySequence(goToMiddleJunction)
         claw.toggleGrab()
         sleep(250)
-        lift.positionSetter(0)
-
         // parking time
         drive.followTrajectorySequence(parkingSetter)
 
