@@ -13,7 +13,7 @@ class Arm (hardwareMap: HardwareMap) {
     var claw: Servo = hardwareMap.servo.get(CLAW)
     var armRotator: Servo = hardwareMap.servo.get(ARM_ROTATOR) //
     var armStabilizer: Servo = hardwareMap.servo.get(ARM_STABILIZER) //this servo is what controls the belt
-    var armLift: Servo = hardwareMap.servo.get(ARM_LIFT) //this is what is connected to the lift
+    var armLift: DcMotor = hardwareMap.dcMotor.get(ARM_LIFT) //this is what is connected to the lift
 
     var isGrabbing = false
         private set
@@ -24,15 +24,18 @@ class Arm (hardwareMap: HardwareMap) {
         private set
 
     init {
+        armLift.targetPosition = 0
+        armLift.mode = DcMotor.RunMode.RUN_TO_POSITION
+        armLift.zeroPowerBehavior = DcMotor.ZeroPowerBehavior.BRAKE
+
         claw.position = 0.075
-        armLift.position = 0.9166666
         armStabilizer.position = 0.0
+        armRotator.position = 0.05
     }
 
     fun init(){
         armRotator.position = 0.0
         armStabilizer.position = 0.0
-        armLift.position = 1.0
     }
 
     fun toggleGrab(){
@@ -44,7 +47,7 @@ class Arm (hardwareMap: HardwareMap) {
         liftToggle = !liftToggle
         isRotated = !isRotated
 
-        armLift.position = if(liftToggle) 0.2 else 1.0
+//        armLift.position = if(liftToggle) 0.2 else 1.0
         armRotator.position = if(isRotated) 0.66666666 else 0.0
 
     }
@@ -69,19 +72,32 @@ class Arm (hardwareMap: HardwareMap) {
 
     fun moveArmLiftJoint(power: Double){
         if (power != 0.0) {
-            armLift.position = Range.clip(
-                armLift.position + (power/50.0), // Edit the target relative to the currentPosition for use with joysticks
-                0.125,
-                0.9172222222222)
-        }
 
-        if(armLift.position > 0.52) {
-            armStabilizer.position = 1.09945 * (0.9172 - armLift.position) + 0.2922
-            armRotator.position = 0.0
-        } else {
-            armStabilizer.position = 0.984557 * (0.52 - armLift.position) + 0.1144
-            armRotator.position = 0.6666666
+            armLift.targetPosition = Range.clip(
+                armLift.currentPosition + (power * 100).toInt(), // Edit the target relative to the currentPosition for use with joysticks
+                0,
+                1070)
+            armLift.mode = DcMotor.RunMode.RUN_TO_POSITION
         }
+        armLift.power = 0.2
+//
+//        if(armLift.currentPosition > 535) {
+//            armStabilizer.position = 1.09945 * (560 - armLift.currentPosition) + 0.2922
+//            armRotator.position = 0.0
+//        } else {
+//            armStabilizer.position = 0.984557 * (270 - armLift.currentPosition) + 0.1144
+//            armRotator.position = 0.6666666
+//        }
+
+    }
+
+    fun moveArmLiftJointToPos(pos: Int){
+        armLift.targetPosition = Range.clip(
+        pos, // Edit the target relative to the currentPosition for use with joysticks
+        0,
+        1070)
+        armLift.mode = DcMotor.RunMode.RUN_TO_POSITION
+        armLift.power = 0.2
 
     }
 

@@ -28,7 +28,7 @@ abstract class BaseTeleOp : OpMode() {
         drive()
         lift.move(smoothInput(-gamepad2.left_stick_y.toDouble())) // uncomment
 //        arm.moveArmRotator(-gamepad2.right_stick_x.toDouble()) //maybe keep
-        arm.moveArmLiftJoint(gamepad2.right_stick_y.toDouble())
+        arm.moveArmLiftJoint(-gamepad2.right_stick_y.toDouble())
 //        arm.moveArmStabilizer(gamepad2.right_stick_y.toDouble())
 
         if (gamepad2.a && !isClawButtonPressed) {
@@ -68,7 +68,8 @@ abstract class BaseTeleOp : OpMode() {
         telemetry.addData("Claw pos", arm.claw.position)
         telemetry.addData("Arm Rotator Pos",arm.armRotator.position)
         telemetry.addData("Arm Stabilizer pos", arm.armStabilizer.position)
-        telemetry.addData("Arm Lift Joint pos", arm.armLift.position)
+        telemetry.addData("Arm Lift Joint pos", arm.armLift.currentPosition)
+        telemetry.addData("Arm Lift Joint target", arm.armLift.targetPosition)
         telemetry.update()
     }
 

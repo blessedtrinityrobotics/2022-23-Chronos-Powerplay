@@ -9,7 +9,7 @@ import org.firstinspires.ftc.teamcode.MIDDLE_JUNCTION_HEIGHT
 @Autonomous(name="LeftSideRRAuto")
 class LeftSideRRAuto: BasedRoadRunnerAuto() {
 
-
+// armLiftJointPos = 870 is horizontal 
 
 
     override fun auto() {
@@ -23,28 +23,41 @@ class LeftSideRRAuto: BasedRoadRunnerAuto() {
             .build()
 
         var getToSignalCone =  drive.trajectorySequenceBuilder(Pose2d())
-            .forward(21.0)
+            .forward(18.0)
             .build()
 
         var getHighJunctionFirstTime = drive.trajectorySequenceBuilder(Pose2d())
-            .lineToSplineHeading(Pose2d(10.0,0.0, Math.toRadians(90.0)))
+            .forward(43.0)
+            .back(10.0)
+            .turn(Math.toRadians(45.0))
+//            .lineToSplineHeading(Pose2d(30.0,0.0, Math.toRadians(45.0)))
             .build()
+
+//        var getToConeStackFirstTime = drive.trajectorySequenceBuilder(Pose2d())
+//            .build()
+//
+//        var cycleToJunction = drive.trajectorySequenceBuilder(Pose2d())
+//            .build()
+//
+//        var cycleToConeStack = drive.trajectorySequenceBuilder(Pose2d())
+//            .build()
+
+
 
 
         // gets to signal cone
         drive.followTrajectorySequence(getToSignalCone)
+        zone = pipeline.zone
         sleep(1500)
         drive.followTrajectorySequence(getHighJunctionFirstTime)
+//        lift.positionSetter()
 
         //places first cone
 
 
 
 
-        //goes to Signal Cone and pushes it out of the way
-//        drive.followTrajectorySequence(goToSignalCone)
-//        zone = pipeline.zone
-//        drive.followTrajectorySequence(pushAwaySignalCone)
+
 //
 //        //stacks first cone from the stack to the middle junction
 //        lift.positionSetter(FIRST_CONE_STACK_HEIGHT)
