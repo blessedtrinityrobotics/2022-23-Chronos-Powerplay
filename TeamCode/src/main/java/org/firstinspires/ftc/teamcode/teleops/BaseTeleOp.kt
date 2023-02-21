@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.teleops
 
+import com.acmerobotics.dashboard.FtcDashboard
+import com.acmerobotics.dashboard.telemetry.MultipleTelemetry
 import com.qualcomm.robotcore.eventloop.opmode.OpMode
 import com.qualcomm.robotcore.hardware.DcMotor
 import org.firstinspires.ftc.teamcode.hardware.*
@@ -11,6 +13,7 @@ abstract class BaseTeleOp : OpMode() {
     lateinit var drivetrain: Drivetrain
     lateinit var arm: Arm
     lateinit var lift: Lift
+    lateinit var dashboard: FtcDashboard
 
     var isClawButtonPressed = false
     var isArmLiftToggle = false
@@ -21,15 +24,17 @@ abstract class BaseTeleOp : OpMode() {
         drivetrain = Drivetrain(hardwareMap)
         arm = Arm(hardwareMap)
         lift = Lift(hardwareMap)
+        dashboard = FtcDashboard.getInstance()
+        telemetry = MultipleTelemetry(telemetry, dashboard.telemetry)
 
     }
 
     override fun loop() {
         drive()
-        lift.move(smoothInput(-gamepad2.left_stick_y.toDouble())) // uncomment
-//        arm.moveArmRotator(-gamepad2.right_stick_x.toDouble()) //maybe keep
-        arm.moveArmLiftJoint(-gamepad2.right_stick_y.toDouble())
-//        arm.moveArmStabilizer(gamepad2.right_stick_y.toDouble())
+//        lift.move(smoothInput(-gamepad2.left_stick_y.toDouble())) // uncomment
+//        arm.moveArmRotator(-gamepad2.right_stick_x.toDouble()) //maybe keep // yeah no
+        arm.moveArmLiftJoint(-gamepad2.left_stick_y.toDouble())
+//        arm.moveArmStabilizer(gamepad2.left_stick_x.toDouble())
 
         if (gamepad2.a && !isClawButtonPressed) {
             isClawButtonPressed = true
@@ -70,7 +75,13 @@ abstract class BaseTeleOp : OpMode() {
         telemetry.addData("Arm Stabilizer pos", arm.armStabilizer.position)
         telemetry.addData("Arm Lift Joint pos", arm.armLift.currentPosition)
         telemetry.addData("Arm Lift Joint target", arm.armLift.targetPosition)
+        telemetry.addData("battery Level", hardwareMap.voltageSensor.iterator().next().voltage)
         telemetry.update()
+
+
+        dashboard.telemetry.addData("arm.armStabilizer.position", arm.armStabilizer.position)
+        dashboard.telemetry.addData("arm.armLift.currentPosition", arm.armLift.currentPosition)
+        dashboard.telemetry.update()
     }
 
 }

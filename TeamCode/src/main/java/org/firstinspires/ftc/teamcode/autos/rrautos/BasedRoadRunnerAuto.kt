@@ -7,7 +7,9 @@ import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName
 import org.firstinspires.ftc.teamcode.SignalSleevePipeline
 import org.firstinspires.ftc.teamcode.hardware.Arm
 import org.firstinspires.ftc.teamcode.hardware.Claw
+
 import org.firstinspires.ftc.teamcode.hardware.Lift
+import org.firstinspires.ftc.teamcode.hardware.SetUpServo
 import org.firstinspires.ftc.teamcode.roadrunner.drive.SampleMecanumDrive
 import org.openftc.easyopencv.OpenCvCamera
 import org.openftc.easyopencv.OpenCvCameraFactory
@@ -19,6 +21,7 @@ abstract  class BasedRoadRunnerAuto: LinearOpMode() {
     lateinit var arm: Arm
     lateinit var lift: Lift
     lateinit var webcam : OpenCvWebcam
+    lateinit var setUpServo: SetUpServo
     lateinit var pipeline : SignalSleevePipeline
     var zone = 0
     var startPose = Pose2d(0.0, 0.0, 0.0)
@@ -29,6 +32,7 @@ abstract  class BasedRoadRunnerAuto: LinearOpMode() {
         drive = SampleMecanumDrive(hardwareMap)
         arm = Arm(hardwareMap)
         lift = Lift(hardwareMap)
+        setUpServo = SetUpServo(hardwareMap)
         pipeline = SignalSleevePipeline()
 
         val cameraMonitorViewId = hardwareMap.appContext.resources.getIdentifier(
@@ -56,7 +60,9 @@ abstract  class BasedRoadRunnerAuto: LinearOpMode() {
     override fun runOpMode() {
         setUp()
         arm.init()
+        setUpServo.zero()
         waitForStart()
+        setUpServo.upRight()
         auto()
     }
 

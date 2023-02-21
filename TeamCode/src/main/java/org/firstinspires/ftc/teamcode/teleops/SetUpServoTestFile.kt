@@ -22,6 +22,8 @@ class setUpServoTestFile: OpMode() {
             setUpServo.upRight()
         }
 
+        setUpServo.moveServo(gamepad2.left_stick_y.toDouble())
+
         telemetry.addData("Servo Pos", setUpServo.leftSideServo.position)
         telemetry.update()
     }

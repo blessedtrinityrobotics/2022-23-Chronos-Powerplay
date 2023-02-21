@@ -27,15 +27,12 @@ class Arm (hardwareMap: HardwareMap) {
         armLift.targetPosition = 0
         armLift.mode = DcMotor.RunMode.RUN_TO_POSITION
         armLift.zeroPowerBehavior = DcMotor.ZeroPowerBehavior.BRAKE
-
-        claw.position = 0.075
-        armStabilizer.position = 0.0
-        armRotator.position = 0.05
     }
 
     fun init(){
-        armRotator.position = 0.0
-        armStabilizer.position = 0.0
+        claw.position = 0.075
+        armRotator.position = 0.05
+        armStabilizer.position = 0.2
     }
 
     fun toggleGrab(){
@@ -56,7 +53,7 @@ class Arm (hardwareMap: HardwareMap) {
         if (power != 0.0) {
             armRotator.position = Range.clip(
                 armRotator.position + (power/50.0), // Edit the target relative to the currentPosition for use with joysticks
-                -1.0,
+                0.0,
                 1.0)
         }
     }
@@ -80,14 +77,14 @@ class Arm (hardwareMap: HardwareMap) {
             armLift.mode = DcMotor.RunMode.RUN_TO_POSITION
         }
         armLift.power = 0.2
-//
-//        if(armLift.currentPosition > 535) {
-//            armStabilizer.position = 1.09945 * (560 - armLift.currentPosition) + 0.2922
-//            armRotator.position = 0.0
-//        } else {
-//            armStabilizer.position = 0.984557 * (270 - armLift.currentPosition) + 0.1144
-//            armRotator.position = 0.6666666
-//        }
+
+        if(armLift.currentPosition > 520) {
+            armStabilizer.position = -.00087696 * (1070 - armLift.currentPosition) + 0.879
+            armRotator.position = 0.7
+        } else {
+            armStabilizer.position = -.0008547 * (520 - armLift.currentPosition) + 1.0
+            armRotator.position = 0.05
+        }
 
     }
 
@@ -99,6 +96,13 @@ class Arm (hardwareMap: HardwareMap) {
         armLift.mode = DcMotor.RunMode.RUN_TO_POSITION
         armLift.power = 0.2
 
+        if (armLift.targetPosition > 520){
+            armStabilizer.position = 0.95
+            armRotator.position = 0.7
+        } else {
+            armStabilizer.position = -.0008547 * (520 - armLift.targetPosition) + 1.0
+            armRotator.position = 0.05
+        }
     }
 
 }
