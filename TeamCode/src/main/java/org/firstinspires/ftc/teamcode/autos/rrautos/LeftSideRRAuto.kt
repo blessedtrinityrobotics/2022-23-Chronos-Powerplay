@@ -28,58 +28,130 @@ class LeftSideRRAuto: BasedRoadRunnerAuto() {
 
         var getHighJunctionFirstTime = drive.trajectorySequenceBuilder(Pose2d(17.5, 4.25))
             .forward(39.0)
-            .lineToSplineHeading(Pose2d(47.0, 0.0, Math.toRadians(-45.0)))
+            .lineToSplineHeading(Pose2d(44.0, 7.0, Math.toRadians(-45.0)))
             .build()
 
-        var getToConeStackFirstTime = drive.trajectorySequenceBuilder(Pose2d())
-            .lineToSplineHeading(Pose2d(3.0, 0.0, Math.toRadians(-95.0)))
-            .back(20.0)
+        var getToConeStackFirstTime = drive.trajectorySequenceBuilder(Pose2d(45.0,7.0, Math.toRadians(-45.0)))
+            .lineToSplineHeading(Pose2d(49.0, 5.0, Math.toRadians(-90.0)))
+            .back(22.0)
             .build()
 
-        var cycleToJunction = drive.trajectorySequenceBuilder(Pose2d())
-            .lineToSplineHeading(Pose2d(0.0,-22.5, Math.toRadians(-65.0)))
+        var cycleToJunction = drive.trajectorySequenceBuilder(Pose2d(49.0, 27.0, Math.toRadians(-90.0)))
+            .lineToSplineHeading(Pose2d(51.0,13.5, Math.toRadians(-65.0)))
             .build()
 
-        var cycleToConeStack = drive.trajectorySequenceBuilder(Pose2d())
-            .lineToSplineHeading(Pose2d(0.0,20.5, Math.toRadians(-94.0)))
+        var cycleToConeStack = drive.trajectorySequenceBuilder(Pose2d(51.0, 13.5, Math.toRadians(-65.0)))
+            .lineToSplineHeading(Pose2d(49.0,27.0, Math.toRadians(-90.0)))
             .build()
 
-        var zoneOne = drive.trajectorySequenceBuilder(Pose2d())
-            .lineToSplineHeading(Pose2d(0.0,22.0, Math.toRadians(-90.0)))
+        var zoneOne = drive.trajectorySequenceBuilder(Pose2d(51.0,13.5, Math.toRadians(-65.0)))
+            .lineToSplineHeading(Pose2d(49.0,27.0, Math.toRadians(-90.0)))
             .build()
 
-        var zoneThree = drive.trajectorySequenceBuilder(Pose2d())
-            .lineToSplineHeading(Pose2d(0.0,-22.5, Math.toRadians(0.0)))
+        var zoneTwo = drive.trajectorySequenceBuilder(Pose2d(51.0,13.5, Math.toRadians(-65.0)))
+            .lineToSplineHeading(Pose2d(49.0,5.0, Math.toRadians(-90.0)))
             .build()
 
-        // gets to signal cone
+        var zoneThree = drive.trajectorySequenceBuilder(Pose2d(51.0,13.5, Math.toRadians(-65.0)))
+            .lineToSplineHeading(Pose2d(48.0,-20.0, Math.toRadians(-90.0)))
+            .build()
+
+
+        arm.toggleGrab()
+
+
         drive.followTrajectorySequence(getToSignalCone)
-//        zone = pipeline.zone
+        zone = pipeline.zone
+        lift.positionSetter(2150)
+        arm.moveArmLiftJointToPos(700)
+        drive.followTrajectorySequence(getHighJunctionFirstTime)
+        arm.moveArmLiftJointToPos(820)
         sleep(1500)
+        arm.moveArmLiftJointToPos(0)
+        lift.positionSetter(0)
+        drive.followTrajectorySequence(getToConeStackFirstTime)
+        sleep(500)
+
+
+        lift.positionSetter(2150)
+        arm.moveArmLiftJointToPos(820)
+        drive.followTrajectorySequence(cycleToJunction)
+        sleep(500)
+
+        lift.positionSetter(0)
+        arm.moveArmLiftJointToPos(0)
+        drive.followTrajectorySequence(cycleToConeStack)
+        sleep(1500)
+
+        lift.positionSetter(2150)
+        arm.moveArmLiftJointToPos(820)
+        drive.followTrajectorySequence(cycleToJunction)
+        sleep(500)
+
+        lift.positionSetter(0)
+        arm.moveArmLiftJointToPos(0)
+        drive.followTrajectorySequence(cycleToConeStack)
+        sleep(1500)
+
+        lift.positionSetter(2150)
+        arm.moveArmLiftJointToPos(820)
+        drive.followTrajectorySequence(cycleToJunction)
+        sleep(500)
+
+        lift.positionSetter(0)
+        arm.moveArmLiftJointToPos(0)
+        drive.followTrajectorySequence(cycleToConeStack)
+        sleep(1500)
+
+        lift.positionSetter(2150)
+        arm.moveArmLiftJointToPos(820)
+        drive.followTrajectorySequence(cycleToJunction)
+        sleep(500)
+
+//        lift.positionSetter(0)
+//        arm.moveArmLiftJointToPos(0)
+//        drive.followTrajectorySequence(cycleToConeStack)
+//        sleep(1500)
+//
 //        lift.positionSetter(2150)
 //        arm.moveArmLiftJointToPos(820)
-//        drive.followTrajectorySequence(getHighJunctionFirstTime)
-//        arm.moveArmLiftJointToPos(0)
-//        lift.positionSetter(0)
-//        sleep(1500)
-//        drive.followTrajectorySequence(getToConeStackFirstTime)
-//        sleep(1500)
 //        drive.followTrajectorySequence(cycleToJunction)
-//        sleep(1500)
-//        drive.followTrajectorySequence(cycleToConeStack)
+//        sleep(500)
 
-//        if(zone == 1){
-//            drive.followTrajectorySequence(zoneOne)
-//        } else if (zone == 3) {
-//            drive.followTrajectorySequence(zoneThree)
-//        } else {
-//            // this would be zone two and it does nothing
+
+
+//        sleep(500)
+//        drive.followTrajectorySequence(cycleToJunction)
+//        sleep(500)
+//        drive.followTrajectorySequence(cycleToConeStack)
+//        sleep(500)
+//        drive.followTrajectorySequence(cycleToJunction)
+//        sleep(500)
+//        drive.followTrajectorySequence(cycleToConeStack)
+//        sleep(500)
+//        drive.followTrajectorySequence(cycleToJunction)
+//        for (i in 1..5){
+//
 //        }
+
+        arm.moveArmLiftJointToPos(0)
+        lift.positionSetter(0)
+        sleep(500)
+        if(zone == 1){
+            drive.followTrajectorySequence(zoneOne)
+        } else if(zone == 2){
+            drive.followTrajectorySequence(zoneTwo)
+        } else if (zone == 3) {
+            drive.followTrajectorySequence(zoneThree)
+        }
 
 
 
 
         while (opModeIsActive()){
+            telemetry.addData("x", drive.poseEstimate.x)
+            telemetry.addData("y", drive.poseEstimate.y)
+            telemetry.addData("heading", drive.poseEstimate.heading)
             telemetry.addData("Zone", zone)
             telemetry.update()
         }

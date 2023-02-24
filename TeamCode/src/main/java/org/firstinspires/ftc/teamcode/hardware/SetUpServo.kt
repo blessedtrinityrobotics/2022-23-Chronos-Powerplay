@@ -11,6 +11,9 @@ class SetUpServo (private val hardwareMap: HardwareMap) {
     var leftSideServo: Servo = hardwareMap.servo.get(RIGHT_SERVO_SETTER)
     var rightSideServo: Servo = hardwareMap.servo.get(LEFT_SERVO_SETTER)
 
+    var isUpright = false
+        private set
+
     init {
         rightSideServo.direction = Servo.Direction.REVERSE
     }
@@ -23,6 +26,14 @@ class SetUpServo (private val hardwareMap: HardwareMap) {
     fun upRight(){
         leftSideServo.position = 0.453
         rightSideServo.position = 0.453
+    }
+
+    fun toggle(){
+        isUpright = !isUpright
+        if (isUpright)
+            upRight()
+        else
+            zero()
     }
 
     fun moveServo(power: Double){

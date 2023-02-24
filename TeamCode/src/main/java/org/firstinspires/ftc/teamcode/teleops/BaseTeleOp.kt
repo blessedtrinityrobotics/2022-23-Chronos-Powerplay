@@ -13,10 +13,12 @@ abstract class BaseTeleOp : OpMode() {
     lateinit var drivetrain: Drivetrain
     lateinit var arm: Arm
     lateinit var lift: Lift
+    lateinit var setUpServo: SetUpServo
     lateinit var dashboard: FtcDashboard
 
     var isClawButtonPressed = false
     var isArmLiftToggle = false
+    var isUpRightToggle = false
 
     abstract fun drive()
 
@@ -24,23 +26,31 @@ abstract class BaseTeleOp : OpMode() {
         drivetrain = Drivetrain(hardwareMap)
         arm = Arm(hardwareMap)
         lift = Lift(hardwareMap)
-        dashboard = FtcDashboard.getInstance()
-        telemetry = MultipleTelemetry(telemetry, dashboard.telemetry)
+        setUpServo = SetUpServo(hardwareMap)
+//        dashboard = FtcDashboard.getInstance()
+//        telemetry = MultipleTelemetry(telemetry, dashboard.telemetry)
 
     }
 
     override fun loop() {
         drive()
-//        lift.move(smoothInput(-gamepad2.left_stick_y.toDouble())) // uncomment
+        lift.move(smoothInput(-gamepad2.left_stick_y.toDouble())) // uncomment
 //        arm.moveArmRotator(-gamepad2.right_stick_x.toDouble()) //maybe keep // yeah no
-        arm.moveArmLiftJoint(-gamepad2.left_stick_y.toDouble())
-//        arm.moveArmStabilizer(gamepad2.left_stick_x.toDouble())
+        arm.moveArmLiftJoint(-gamepad2.right_stick_y.toDouble())
+//        arm.moveArmStabilizer(gamepad2.right_stick_y.toDouble())
 
-        if (gamepad2.a && !isClawButtonPressed) {
+        if (gamepad1.x &&  !isUpRightToggle){
+            isUpRightToggle = true
+            setUpServo.toggle()
+        }
+        if(!gamepad1.x)
+            isUpRightToggle = false
+
+        if (gamepad2.right_bumper || gamepad2.a && !isClawButtonPressed) {
             isClawButtonPressed = true
             arm.toggleGrab()
         }
-        if (!gamepad2.a)
+        if (!gamepad2.right_bumper && !gamepad2.a)
             isClawButtonPressed = false
 
         if (gamepad2.b && !isArmLiftToggle) {
@@ -78,10 +88,10 @@ abstract class BaseTeleOp : OpMode() {
         telemetry.addData("battery Level", hardwareMap.voltageSensor.iterator().next().voltage)
         telemetry.update()
 
-
-        dashboard.telemetry.addData("arm.armStabilizer.position", arm.armStabilizer.position)
-        dashboard.telemetry.addData("arm.armLift.currentPosition", arm.armLift.currentPosition)
-        dashboard.telemetry.update()
+//
+//        dashboard.telemetry.addData("arm.armStabilizer.position", arm.armStabilizer.position)
+//        dashboard.telemetry.addData("arm.armLift.currentPosition", arm.armLift.currentPosition)
+//        dashboard.telemetry.update()
     }
 
 }

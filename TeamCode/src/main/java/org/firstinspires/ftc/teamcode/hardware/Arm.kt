@@ -17,6 +17,7 @@ class Arm (hardwareMap: HardwareMap) {
 
     var isGrabbing = false
         private set
+
     var isRotated = false
         private set
 
@@ -99,9 +100,11 @@ class Arm (hardwareMap: HardwareMap) {
         if (armLift.targetPosition > 520){
             armStabilizer.position = 0.95
             armRotator.position = 0.7
+
         } else {
-            armStabilizer.position = -.0008547 * (520 - armLift.targetPosition) + 1.0
+            armStabilizer.position = -.0008547 * (520 - armLift.currentPosition) + 1.0
             armRotator.position = 0.05
+
         }
     }
 
